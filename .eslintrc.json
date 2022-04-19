@@ -1,0 +1,40 @@
+{
+    "extends": [
+        "@zeebats/eslint-config/typescript"
+    ],
+    "ignorePatterns": [
+        "package-lock.json"
+    ],
+    "overrides": [
+        {
+            "extends": [
+                "plugin:jsonc/recommended-with-json"
+            ],
+            "files": [
+                "**/*.json"
+            ],
+            "rules": {
+                "jsonc/key-spacing": [
+                    "error",
+                    {
+                        "afterColon": true,
+                        "beforeColon": false,
+                        "mode": "strict"
+                    }
+                ],
+                "jsonc/sort-keys": [
+                    "error",
+                    {
+                        "order": {
+                            "type": "asc"
+                        },
+                        "pathPattern": ".*"
+                    }
+                ],
+                "max-len": "off",
+                "max-lines": "off",
+                "max-statements": "off"
+            }
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "dependencies": {
+        "@netlify/functions": "1.0.0",
+        "@supabase/supabase-js": "1.35.0",
+        "cross-fetch": "3.1.5",
+        "date-fns": "2.28.0",
+        "esbuild": "0.14.36",
+        "html-entities": "2.3.3",
+        "isomorphic-unfetch": "3.1.0"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "16.2.3",
+        "@commitlint/config-conventional": "16.2.1",
+        "@zeebats/eslint-config": "1.0.2",
+        "c8": "7.11.0",
+        "eslint-plugin-jsonc": "2.2.1",
+        "vitest": "0.9.3"
+    },
+    "name": "discord-bots",
+    "private": true,
+    "scripts": {
+        "eslint": "eslint '**/*.{json,ts}'",
+        "eslint:fix": "npm run eslint -- --fix",
+        "test": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "update": "npx npm-check -uE"
+    },
+    "version": "1.0.0"
+}

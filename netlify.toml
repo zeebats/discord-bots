@@ -1,0 +1,21 @@
+[functions]
+    directory = "lambda"
+    node_bundler = "esbuild"
+
+[dev]
+    publish = "dist"
+    port = 8889
+
+[[redirects]]
+    from = "/api/*"
+    to = "/.netlify/functions/:splat"
+    status = 200
+    force = true
+
+[[headers]]
+    for = "/*"
+    [headers.values]
+        Referrer-Policy = "strict-origin-when-cross-origin"
+        X-Content-Type-Options = "nosniff"
+        X-Frame-Options = "DENY"
+        X-XSS-Protection = "1; mode=block"
