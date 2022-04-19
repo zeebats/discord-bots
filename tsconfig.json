@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "ES2020",
+        "moduleResolution": "node",
+        "paths": {
+            "@lambda/*": [
+                "lambda/*"
+            ],
+            "@src/*": [
+                "src/*"
+            ],
+            "@utils/*": [
+                "utils/*"
+            ]
+        },
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ES2020"
+    }
+}
