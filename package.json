@@ -15,7 +15,7 @@
         "c8": "7.11.2",
         "eslint-plugin-jsonc": "2.2.1",
         "netlify-cli": "10.0.0",
-        "vitest": "0.9.4"
+        "vitest": "0.10.0"
     },
     "name": "discord-bots",
     "private": true,
