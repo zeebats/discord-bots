@@ -1,4 +1,4 @@
-import { schedule } from '@netlify/functions';
+import { Handler, schedule } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
 
 import { getNewestMix, getWebhook } from '@src/spicey-la-vicey';
@@ -10,8 +10,7 @@ const {
 
 const $supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 
-// eslint-disable-next-line unicorn/prefer-module
-module.exports.handler = schedule('00 0 * * 2', async (): Promise<{ statusCode: number; }> => {
+export const handler: Handler = schedule('0 0-12 * * 2', async () => {
     try {
         const mix = await getNewestMix();
 
