@@ -1,5 +1,5 @@
 import { decode } from 'html-entities';
-import { getUnixTime, parse } from 'date-fns';
+import { getUnixTime, parse, startOfDay } from 'date-fns';
 
 export const getTitle = (string: string): string => {
     const match = (/<.*?class=".*?sc-c-metadata__primary.*?>(.*?)<\/.*>/g).exec(string);
@@ -46,5 +46,5 @@ export const getTimestamp = (string: string): number => {
 
     const [, value] = match;
 
-    return getUnixTime(parse(value, 'dd LLL yyyy', Date.now()));
+    return getUnixTime(startOfDay(parse(value, 'dd LLL yyyy', Date.now())));
 };
