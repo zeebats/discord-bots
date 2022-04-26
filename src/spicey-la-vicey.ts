@@ -44,22 +44,16 @@ export const getNewestMix = async (): Promise<Mix> => {
     return newestMix;
 };
 
-export const getWebhook = async (mix: Mix): Promise<void> => {
+export const getWebhook = async ({ content, embeds }: { content: string, embeds?: { image: { url: string } }[] }): Promise<void> => {
     await fetch('https://discord.com/api/webhooks/964154301582835712/WzolPxY6Ve_vaz2rGwAM5zkINsLpQEwq5tFHiwNLvmc5BTUcIJo8TttzZ3Fwpbmh4g4P', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            content: `🌶🌶🌶\n**${mix.title}**\n<${mix.link}>\n🌶🌶🌶`,
+            content,
+            embeds,
             username: 'Spicey LaVicey',
-            embeds: [
-                {
-                    image: {
-                        url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700',
-                    },
-                },
-            ],
         }),
     });
 };
