@@ -3,7 +3,7 @@ import { Handler, schedule } from '@netlify/functions';
 import { useWebhook } from '@src/webhook';
 import { Shows, getShows } from '@src/shows';
 
-const { WEBHOOK_SHOWS = '' } = process.env;
+const { WEBHOOK_SHOWS } = process.env;
 
 const handleUpdate = async (items: Shows): Promise<void> => {
     await useWebhook({

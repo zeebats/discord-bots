@@ -6,9 +6,9 @@ import { useWebhook } from '@src/webhook';
 import { Mix, getNewestMix } from '@src/spicey-la-vicey';
 
 const {
-    SUPABASE_URL = '',
-    SUPABASE_API_KEY = '',
-    WEBHOOK_SPICEY_LA_VICEY = '',
+    SUPABASE_URL,
+    SUPABASE_API_KEY,
+    WEBHOOK_SPICEY_LA_VICEY,
 } = process.env;
 
 const $supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
