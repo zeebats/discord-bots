@@ -1,23 +1,25 @@
 {
-    "compilerOptions": {
-        "baseUrl": "./",
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "module": "ES2020",
-        "moduleResolution": "node",
-        "paths": {
-            "@lambda/*": [
-                "lambda/*"
-            ],
-            "@src/*": [
-                "src/*"
-            ],
-            "@utils/*": [
-                "utils/*"
-            ]
-        },
-        "skipLibCheck": true,
-        "strict": true,
-        "target": "ES2020"
-    }
+  "compilerOptions": {
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "paths": {
+      "@lambda/*": [
+        "lambda/*"
+      ],
+      "@src/*": [
+        "src/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ]
+    },
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2020"
+  }
 }
