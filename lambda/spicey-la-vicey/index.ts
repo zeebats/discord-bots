@@ -57,7 +57,6 @@ const handleUpdate = async (item: Mix) => {
                         },
                     ],
                     footer: {
-                        // eslint-disable-next-line camelcase
                         text: `Posted on: ${format(fromUnixTime(item.timestamp), 'dd MMMM')}`,
                     },
                 },
