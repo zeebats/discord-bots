@@ -1,17 +1,23 @@
 import { Handler, schedule } from '@netlify/functions';
 
-import { Movies, getMovies, getWebhook } from '@src/movies';
+import { useWebhook } from '@src/webhook';
+import { Movies, getMovies } from '@src/movies';
+
+const { WEBHOOK_MOVIES = '' } = process.env;
 
 const handleUpdate = async (items: Movies): Promise<void> => {
-    await getWebhook({
-        embeds: items.map(item => ({
-            title: item.title,
-            url: item.link,
-            description: `[🔗 Trakt.tv](${item.link})`,
-            image: {
-                url: item.poster,
-            },
-        })),
+    await useWebhook({
+        url: WEBHOOK_MOVIES,
+        webhook: {
+            embeds: items.map(item => ({
+                title: item.title,
+                url: item.link,
+                description: `[🔗 Trakt.tv](${item.link})`,
+                image: {
+                    url: item.poster,
+                },
+            })),
+        },
     });
 };
 

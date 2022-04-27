@@ -49,15 +49,3 @@ export const getShows = async (): Promise<Shows> => {
 
     return formatShows(response);
 };
-
-export const getWebhook = async ({ embeds }: { embeds: { title: string, description: string, image: { url: string } }[] }): Promise<void> => {
-    await fetch('https://discord.com/api/webhooks/968600837490348142/oAQU3Kl4jV-btFclI_LPP0g7nhRURvs77Waxsb8Of5Qk-wyMTCJFPEDfwqkKdWEJzoBB', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            embeds,
-        }),
-    });
-};

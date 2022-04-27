@@ -1,12 +1,14 @@
 import { Handler, schedule } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
-import { getHours } from 'date-fns';
+import { getHours, fromUnixTime, format } from 'date-fns';
 
-import { Mix, getNewestMix, getWebhook } from '@src/spicey-la-vicey';
+import { useWebhook } from '@src/webhook';
+import { Mix, getNewestMix } from '@src/spicey-la-vicey';
 
 const {
     SUPABASE_URL = '',
     SUPABASE_API_KEY = '',
+    WEBHOOK_SPICEY_LA_VICEY = '',
 } = process.env;
 
 const $supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
@@ -20,25 +22,47 @@ const handleBefore = async () => {
         .eq('id', 1);
 };
 
-const handleUpdate = async (mix: Mix) => {
+const handleUpdate = async (item: Mix) => {
     await $supabase
         .from('spicey-la-vicey')
         .update({
-            timestamp: mix.timestamp,
-            title: mix.title,
+            timestamp: item.timestamp,
+            title: item.title,
             update: false,
         })
         .eq('id', 1);
 
-    await getWebhook({
-        content: `🌶🌶🌶\n**${mix.title}**\n<${mix.link}>\n🌶🌶🌶`,
-        embeds: [
-            {
-                image: {
-                    url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700',
+    await useWebhook({
+        url: WEBHOOK_SPICEY_LA_VICEY,
+        webhook: {
+            embeds: [
+                {
+                    color: 13_189_196,
+                    title: item.title,
+                    description: `🌶🌶🌶\n\n${item.description}`,
+                    thumbnail: {
+                        url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700',
+                    },
+                    url: item.link,
+                    fields: [
+                        {
+                            inline: true,
+                            name: '▶️',
+                            value: `**[Listen now](${item.link})**`,
+                        },
+                        {
+                            inline: true,
+                            name: '🗄',
+                            value: '**[All episodes](https://www.bbc.co.uk/sounds/brand/b09c12lj)**',
+                        },
+                    ],
+                    footer: {
+                        // eslint-disable-next-line camelcase
+                        text: `Posted on: ${format(fromUnixTime(item.timestamp), 'dd MMMM')}`,
+                    },
                 },
-            },
-        ],
+            ],
+        },
     });
 };
 
@@ -50,8 +74,17 @@ const handleFinally = async () => {
         })
         .eq('id', 1);
 
-    await getWebhook({
-        content: '🥦🥦🥦\n**No new mix this week**\nFinished checking new mixes, meh!\n🥦🥦🥦',
+    await useWebhook({
+        url: WEBHOOK_SPICEY_LA_VICEY,
+        webhook: {
+            embeds: [
+                {
+                    color: 4_944_171,
+                    description: '🥦🥦🥦\n\nFinished checking new mixes, meh!',
+                    title: 'No new mix this week',
+                },
+            ],
+        },
     });
 };
 
