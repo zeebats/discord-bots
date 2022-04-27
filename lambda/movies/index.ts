@@ -3,7 +3,7 @@ import { Handler, schedule } from '@netlify/functions';
 import { useWebhook } from '@src/webhook';
 import { Movies, getMovies } from '@src/movies';
 
-const { WEBHOOK_MOVIES = '' } = process.env;
+const { WEBHOOK_MOVIES } = process.env;
 
 const handleUpdate = async (items: Movies): Promise<void> => {
     await useWebhook({
