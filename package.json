@@ -27,7 +27,7 @@
     "netlify": "netlify",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc",
     "update": "npx npm-check -uE"
   },
   "version": "1.0.0"
