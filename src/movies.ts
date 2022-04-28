@@ -6,14 +6,11 @@ import {
     getProviderColor,
     getProvider,
     getThumbnail,
-    getProviderLink,
 } from '@utils/justwatch';
 
-import { getMovieItems } from '@utils/movies';
-
+import { selectedProviders } from '@enums/providers';
+import { getMovieItems, getProviderLink } from '@utils/movies';
 import { Providers } from '@ts/movies';
-
-// import { ENV_DEV } from '@utils/netlify';
 
 export const formatMovies = (response: string): Providers => {
     const today = getToday(response);
@@ -30,7 +27,7 @@ export const formatMovies = (response: string): Providers => {
 };
 
 export const getMovies = async (): Promise<Providers> => {
-    const request = await fetch('https://www.justwatch.com/nl/movies/new?providers=atp,dnp,nfx');
+    const request = await fetch(`https://www.justwatch.com/us/movies/new?providers=${Object.keys(selectedProviders).join(',')}`);
     const response = await request.text();
 
     return formatMovies(response);
