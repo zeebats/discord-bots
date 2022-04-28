@@ -1,29 +1,40 @@
 import { Handler, schedule } from '@netlify/functions';
 
 import { useWebhook } from '@src/webhook';
-import { Shows, getShows } from '@src/shows';
+import { getShows } from '@src/shows';
+import { Providers } from '@ts/shows';
 
 const { WEBHOOK_SHOWS } = process.env;
 
-const handleUpdate = async (items: Shows): Promise<void> => {
+const handleUpdate = async (providers: Providers): Promise<void> => {
     await useWebhook({
         url: WEBHOOK_SHOWS,
         webhook: {
-            embeds: items.map(item => ({
-                title: item.title,
-                url: item.link,
-                description: `[🔗 Trakt.tv](${item.link})\n\n${item.episode} in ${item.season}`,
-                image: {
-                    url: item.poster,
+            embeds: providers.map(({
+                color,
+                provider,
+                thumbnail,
+                shows,
+                url,
+            }) => ({
+                color,
+                title: `New on ${provider}`,
+                thumbnail: {
+                    url: thumbnail,
                 },
+                url,
+                fields: shows.map(show => ({
+                    name: show.title,
+                    value: `[${show.episode} in ${show.season}](${show.link})`,
+                })),
             })),
         },
     });
 };
 
-export const handler: Handler = schedule('0 18 * * *', async (): Promise<{ statusCode: number; }> => {
+export const handler: Handler = schedule('0 16 * * *', async (): Promise<{ statusCode: number; }> => {
     try {
-        const items: Shows = await getShows();
+        const items: Providers = await getShows();
 
         await handleUpdate(items);
 

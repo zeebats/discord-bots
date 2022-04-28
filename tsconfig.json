@@ -14,10 +14,14 @@
       "@src/*": [
         "src/*"
       ],
+      "@ts/*": [
+        "types/*"
+      ],
       "@utils/*": [
         "utils/*"
       ]
     },
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2020"

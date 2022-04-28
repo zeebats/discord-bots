@@ -2,7 +2,9 @@ import fetch from 'cross-fetch';
 
 import { RESTPostAPIWebhookWithTokenJSONBody } from 'discord-api-types/rest/v10/webhook';
 
-export const useWebhook = async (
+import { ENV_DEV } from '@utils/netlify';
+
+export const useWebhook = (
     {
         url,
         webhook,
@@ -10,10 +12,10 @@ export const useWebhook = async (
         url: string,
         webhook: RESTPostAPIWebhookWithTokenJSONBody
     },
-): Promise<void> => {
+): Promise<Response> => {
     const { content = '', embeds } = webhook;
 
-    await fetch(url, {
+    return fetch(ENV_DEV ? 'https://discord.com/api/webhooks/968566804601516062/38e5JqBq52HVTqODgIDsEJaZsf8oo8YFDtHmskxbMrv-Y_ceVFkVSQTSQ0V_8nouzn88' : url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
