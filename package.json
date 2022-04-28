@@ -9,7 +9,7 @@
         "isomorphic-unfetch": "3.1.0"
     },
     "devDependencies": {
-        "@commitlint/cli": "16.2.3",
+        "@commitlint/cli": "16.2.4",
         "@commitlint/config-conventional": "16.2.1",
         "@zeebats/eslint-config": "1.0.2",
         "c8": "7.11.2",
