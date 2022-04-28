@@ -1,41 +1,19 @@
-export const getTitle = (string: string): string => {
-    const altTag = (/<img.*?alt="(.*?)"/g).exec(string);
+import { HTMLElement } from 'node-html-parser';
 
-    if (altTag !== null) {
-        const [, value] = altTag;
+import {
+    getLink,
+    getPoster,
+    getTitle,
+} from '@utils/justwatch';
 
-        return value;
-    }
+import { Movies } from '@ts/movies';
 
-    const fallbackContent = (/--no-poster">(.*?)<\/div>/g).exec(string);
+export const getMovieItems = (element: HTMLElement | null): Movies => {
+    const items = element?.querySelectorAll('.horizontal-title-list__item') || [];
 
-    if (fallbackContent !== null) {
-        const [, value] = fallbackContent;
-
-        return value;
-    }
-
-    return '';
+    return items.map(item => ({
+        link: getLink(item),
+        poster: getPoster(item),
+        title: getTitle(item),
+    })) || [];
 };
-
-export const getPoster = (string: string): string => {
-    const jpgSource = (/type="image\/jpeg" srcset=".*?, (.*?) 2x"/g).exec(string);
-
-    if (jpgSource !== null) {
-        const [, value] = jpgSource;
-
-        return value;
-    }
-
-    const fallbackImage = (/<img.*?data-src="(.*?)"/g).exec(string);
-
-    if (fallbackImage !== null) {
-        const [, value] = fallbackImage;
-
-        return value;
-    }
-
-    return '';
-};
-
-export const getLink = (title: string): string => `https://trakt.tv/search?query=${encodeURIComponent(title.toLowerCase())}`;

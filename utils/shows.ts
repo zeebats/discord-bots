@@ -1,73 +1,41 @@
-export const getTitle = (string: string): string => {
-    const altTag = (/<img.*?alt="(.*?)\s-.*?"/g).exec(string);
+import { HTMLElement } from 'node-html-parser';
 
-    if (altTag !== null) {
-        const [, value] = altTag;
+import {
+    getLink,
+    getPoster,
+    getTitle,
+} from '@utils/justwatch';
 
-        return value;
-    }
+import { Shows } from '@ts/shows';
 
-    const fallbackContent = (/--no-poster">(.*?)<\/div>/g).exec(string);
+export const getSeason = (item: HTMLElement | null): string => {
+    const element = item?.querySelector('.title-poster__badge');
 
-    if (fallbackContent !== null) {
-        const [, value] = fallbackContent;
-
-        return value;
-    }
-
-    return '';
-};
-
-export const getSeason = (string: string): string => {
-    const season = (/title-poster__badge">(.*?)<\/span>/g).exec(string);
-
-    if (season !== null) {
-        const [, value] = season;
-
-        return value;
-    }
-
-    return '';
+    return element?.innerText?.toLowerCase() || '';
 };
 
 const formatEpisode = (string: string): string => {
-    let formatted = string;
+    let formatted = string.toLowerCase();
 
-    formatted = formatted.replace('New ', '1 ');
+    formatted = formatted.replace('new ', '1 ');
 
     return formatted;
 };
 
-export const getEpisode = (string: string): string => {
-    const episode = (/title-poster__badge__new"><span>(.*?)<\/span>/g).exec(string);
+export const getEpisode = (item: HTMLElement | null): string => {
+    const element = item?.querySelector('.title-poster__badge__new');
 
-    if (episode !== null) {
-        const [, value] = episode;
-
-        return formatEpisode(value);
-    }
-
-    return '';
+    return formatEpisode(element?.innerText || '');
 };
 
-export const getPoster = (string: string): string => {
-    const jpgSource = (/type="image\/jpeg" srcset=".*?, (.*?) 2x"/g).exec(string);
+export const getShowItems = (element: HTMLElement | null): Shows => {
+    const items = element?.querySelectorAll('.horizontal-title-list__item') || [];
 
-    if (jpgSource !== null) {
-        const [, value] = jpgSource;
-
-        return value;
-    }
-
-    const fallbackImage = (/<img.*?data-src="(.*?)"/g).exec(string);
-
-    if (fallbackImage !== null) {
-        const [, value] = fallbackImage;
-
-        return value;
-    }
-
-    return '';
+    return items.map(item => ({
+        episode: getEpisode(item),
+        link: getLink(item),
+        poster: getPoster(item),
+        season: getSeason(item),
+        title: getTitle(item),
+    })) || [];
 };
-
-export const getLink = (title: string): string => `https://trakt.tv/search?query=${encodeURIComponent(title.toLowerCase())}`;

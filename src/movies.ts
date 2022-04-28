@@ -1,43 +1,35 @@
 import fetch from 'cross-fetch';
 
 import {
-    getTitle,
-    getPoster,
-    getLink,
-} from '@utils/movies';
+    getToday,
+    getProviders,
+    getProviderColor,
+    getProvider,
+    getThumbnail,
+    getProviderLink,
+} from '@utils/justwatch';
 
-export type Movie = {
-    link: string;
-    poster: string;
-    title: string;
-}
+import { getMovieItems } from '@utils/movies';
 
-export type Movies = Movie[];
+import { Providers } from '@ts/movies';
 
-export const formatMovies = (response: string): Movies => {
-    const cleaned = response.replace(/^\s+|\s+$/g, '').replace(/(\r\n|\n|\r)/gm, '');
-    const today = (/(<div class="timeline__timeframe.*?)<div class="timeline__timeframe/g).exec(cleaned);
+// import { ENV_DEV } from '@utils/netlify';
 
-    if (today === null) {
-        return [];
-    }
+export const formatMovies = (response: string): Providers => {
+    const today = getToday(response);
 
-    const [, todayMatch] = today;
+    const providers = getProviders(today);
 
-    const movies = todayMatch.match(/(<div index="\d" class="title-poster">.+?<\/div>)/g) || [];
-
-    return movies.map(movie => {
-        const title = getTitle(movie);
-
-        return {
-            link: getLink(title),
-            poster: getPoster(movie),
-            title,
-        };
-    });
+    return providers.map(provider => ({
+        color: getProviderColor(provider),
+        provider: getProvider(provider),
+        movies: getMovieItems(provider),
+        thumbnail: getThumbnail(provider),
+        url: getProviderLink(provider),
+    })) || [];
 };
 
-export const getMovies = async (): Promise<Movies> => {
+export const getMovies = async (): Promise<Providers> => {
     const request = await fetch('https://www.justwatch.com/nl/movies/new?providers=atp,dnp,nfx');
     const response = await request.text();
 

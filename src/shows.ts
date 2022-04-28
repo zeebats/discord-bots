@@ -1,49 +1,35 @@
 import fetch from 'cross-fetch';
 
 import {
-    getTitle,
-    getPoster,
-    getSeason,
-    getEpisode,
-    getLink,
-} from '@utils/shows';
+    getToday,
+    getProviders,
+    getProviderColor,
+    getProvider,
+    getThumbnail,
+    getProviderLink,
+} from '@utils/justwatch';
 
-export type Show = {
-    episode: string;
-    link: string;
-    poster: string;
-    season: string;
-    title: string;
-}
+import { getShowItems } from '@utils/shows';
 
-export type Shows = Show[];
+import { Providers } from '@ts/shows';
 
-export const formatShows = (response: string): Shows => {
-    const cleaned = response.replace(/^\s+|\s+$/g, '').replace(/(\r\n|\n|\r)/gm, '');
-    const today = (/(<div class="timeline__timeframe.*?)<div class="timeline__timeframe/g).exec(cleaned);
+// import { ENV_DEV } from '@utils/netlify';
 
-    if (today === null) {
-        return [];
-    }
+export const formatShows = (response: string): Providers => {
+    const today = getToday(response);
 
-    const [, todayMatch] = today;
+    const providers = getProviders(today);
 
-    const shows = todayMatch.match(/(<div index="\d" class="title-poster">.+?<\/div>)/g) || [];
-
-    return shows.map(show => {
-        const title = getTitle(show);
-
-        return {
-            episode: getEpisode(show),
-            link: getLink(title),
-            poster: getPoster(show),
-            season: getSeason(show),
-            title,
-        };
-    });
+    return providers.map(provider => ({
+        color: getProviderColor(provider),
+        provider: getProvider(provider),
+        shows: getShowItems(provider),
+        thumbnail: getThumbnail(provider),
+        url: getProviderLink(provider),
+    })) || [];
 };
 
-export const getShows = async (): Promise<Shows> => {
+export const getShows = async (): Promise<Providers> => {
     const request = await fetch('https://www.justwatch.com/nl/tv-series/new?providers=atp,dnp,nfx');
     const response = await request.text();
 
