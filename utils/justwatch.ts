@@ -1,5 +1,7 @@
 import parse, { HTMLElement } from 'node-html-parser';
 
+import { selectedProviders } from '@enums/providers';
+
 export const getTitle = (item: HTMLElement | null): string => {
     const element = item?.querySelector('.picture-comp__img');
 
@@ -50,11 +52,7 @@ export const getProvider = (element: HTMLElement | null): string => {
     return provider?.getAttribute('alt') || 'No provider found';
 };
 
-export const getColor = (string: string): number => ({
-    atp: 1,
-    dnp: 3_240_685,
-    nfx: 13_774_631,
-}[string]) || 15_724_527;
+export const getColor = (provider: string): number => selectedProviders[provider]?.color || 15_724_527;
 
 export const getProviderShortcode = (element: HTMLElement | null): string => {
     const classes = element?.getAttribute('class');
@@ -66,10 +64,4 @@ export const getProviderColor = (element: HTMLElement | null): number => {
     const provider = getProviderShortcode(element);
 
     return getColor(provider);
-};
-
-export const getProviderLink = (element: HTMLElement | null): string => {
-    const provider = getProviderShortcode(element);
-
-    return `https://www.justwatch.com/nl/tv-series/new?providers=${provider}`;
 };

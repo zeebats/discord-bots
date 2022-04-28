@@ -3,6 +3,7 @@ import { HTMLElement } from 'node-html-parser';
 import {
     getLink,
     getPoster,
+    getProviderShortcode,
     getTitle,
 } from '@utils/justwatch';
 
@@ -16,4 +17,10 @@ export const getMovieItems = (element: HTMLElement | null): Movies => {
         poster: getPoster(item),
         title: getTitle(item),
     })) || [];
+};
+
+export const getProviderLink = (element: HTMLElement | null): string => {
+    const provider = getProviderShortcode(element);
+
+    return `https://www.justwatch.com/us/movies/new=${provider}`;
 };

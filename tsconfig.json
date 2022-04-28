@@ -8,6 +8,9 @@
     "moduleResolution": "node",
     "noEmit": true,
     "paths": {
+      "@enums/*": [
+        "enums/*"
+      ],
       "@lambda/*": [
         "lambda/*"
       ],
