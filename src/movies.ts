@@ -1,16 +1,16 @@
 import fetch from 'cross-fetch';
 
 import {
-    getToday,
-    getProviders,
-    getProviderColor,
+    getColor,
     getProvider,
+    getProviders,
     getThumbnail,
+    getToday,
 } from '@utils/justwatch';
 
-import { selectedProviders } from '@enums/providers';
 import { getMovieItems, getProviderLink } from '@utils/movies';
 import { Providers } from '@ts/movies';
+import { selectedProviders } from '@enums/providers';
 
 export const formatMovies = (response: string): Providers => {
     const today = getToday(response);
@@ -18,9 +18,9 @@ export const formatMovies = (response: string): Providers => {
     const providers = getProviders(today);
 
     return providers.map(provider => ({
-        color: getProviderColor(provider),
-        provider: getProvider(provider),
+        color: getColor(provider),
         movies: getMovieItems(provider),
+        provider: getProvider(provider),
         thumbnail: getThumbnail(provider),
         url: getProviderLink(provider),
     })) || [];

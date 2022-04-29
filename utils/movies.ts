@@ -2,8 +2,8 @@ import { HTMLElement } from 'node-html-parser';
 
 import {
     getLink,
-    getPoster,
-    getProviderShortcode,
+    getShortcode,
+    getThumbnail,
     getTitle,
 } from '@utils/justwatch';
 
@@ -14,13 +14,13 @@ export const getMovieItems = (element: HTMLElement | null): Movies => {
 
     return items.map(item => ({
         link: getLink(item),
-        poster: getPoster(item),
+        thumbnail: getThumbnail(item),
         title: getTitle(item),
     })) || [];
 };
 
 export const getProviderLink = (element: HTMLElement | null): string => {
-    const provider = getProviderShortcode(element);
+    const provider = getShortcode(element);
 
     return `https://www.justwatch.com/us/movies/new=${provider}`;
 };
