@@ -2,8 +2,8 @@ import { HTMLElement } from 'node-html-parser';
 
 import {
     getLink,
-    getPoster,
-    getProviderShortcode,
+    getShortcode,
+    getThumbnail,
     getTitle,
 } from '@utils/justwatch';
 
@@ -15,18 +15,10 @@ export const getSeason = (item: HTMLElement | null): string => {
     return element?.innerText?.toLowerCase() || '';
 };
 
-const formatEpisode = (string: string): string => {
-    let formatted = string.toLowerCase();
-
-    formatted = formatted.replace('new ', '1 ');
-
-    return formatted;
-};
-
 export const getEpisode = (item: HTMLElement | null): string => {
     const element = item?.querySelector('.title-poster__badge__new');
 
-    return formatEpisode(element?.innerText || '');
+    return element?.innerText?.toLowerCase()?.replace('new ', '1 ') || '';
 };
 
 export const getShowItems = (element: HTMLElement | null): Shows => {
@@ -35,14 +27,14 @@ export const getShowItems = (element: HTMLElement | null): Shows => {
     return items.map(item => ({
         episode: getEpisode(item),
         link: getLink(item),
-        poster: getPoster(item),
         season: getSeason(item),
+        thumbnail: getThumbnail(item),
         title: getTitle(item),
     })) || [];
 };
 
 export const getProviderLink = (element: HTMLElement | null): string => {
-    const provider = getProviderShortcode(element);
+    const provider = getShortcode(element);
 
     return `https://www.justwatch.com/us/tv-shows/new=${provider}`;
 };

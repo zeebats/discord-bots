@@ -2,7 +2,7 @@ import { BaseProvider } from '@ts/justwatch';
 
 export type Movie = {
     link: string;
-    poster: string;
+    thumbnail: string;
     title: string;
 }
 

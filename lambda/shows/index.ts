@@ -1,8 +1,8 @@
 import { Handler, schedule } from '@netlify/functions';
 
-import { useWebhook } from '@src/webhook';
-import { getShows } from '@src/shows';
 import { Providers } from '@ts/shows';
+import { getShows } from '@src/shows';
+import { useWebhook } from '@src/webhook';
 
 const { WEBHOOK_SHOWS } = process.env;
 
@@ -18,15 +18,15 @@ const handleUpdate = async (providers: Providers): Promise<void> => {
                 url,
             }) => ({
                 color,
-                title: `New on ${provider}`,
-                thumbnail: {
-                    url: thumbnail,
-                },
-                url,
                 fields: shows.map(show => ({
                     name: show.title,
                     value: `[${show.episode} in ${show.season}](${show.link})`,
                 })),
+                thumbnail: {
+                    url: thumbnail,
+                },
+                title: `New on ${provider}`,
+                url,
             })),
         },
     });

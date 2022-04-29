@@ -1,9 +1,9 @@
 import { Handler, schedule } from '@netlify/functions';
+import { format, fromUnixTime, getHours } from 'date-fns';
 import { createClient } from '@supabase/supabase-js';
-import { getHours, fromUnixTime, format } from 'date-fns';
 
-import { useWebhook } from '@src/webhook';
 import { Mix, getNewestMix } from '@src/spicey-la-vicey';
+import { useWebhook } from '@src/webhook';
 
 const {
     SUPABASE_URL,
@@ -38,12 +38,7 @@ const handleUpdate = async (item: Mix) => {
             embeds: [
                 {
                     color: 13_189_196,
-                    title: item.title,
                     description: `🌶🌶🌶\n\n${item.description}`,
-                    thumbnail: {
-                        url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700',
-                    },
-                    url: item.link,
                     fields: [
                         {
                             inline: true,
@@ -59,6 +54,11 @@ const handleUpdate = async (item: Mix) => {
                     footer: {
                         text: `Posted on: ${format(fromUnixTime(item.timestamp), 'dd MMMM')}`,
                     },
+                    thumbnail: {
+                        url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700',
+                    },
+                    title: item.title,
+                    url: item.link,
                 },
             ],
         },
