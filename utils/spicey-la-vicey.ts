@@ -1,5 +1,6 @@
-import { decode } from 'html-entities';
 import { getUnixTime, parse, startOfDay } from 'date-fns';
+
+import { decode } from 'html-entities';
 
 export const getTitle = (string: string): string => {
     const match = (/<.*?class=".*?sc-c-metadata__primary.*?>(.*?)<\/.*>/g).exec(string);

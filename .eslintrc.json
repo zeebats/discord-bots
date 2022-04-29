@@ -45,5 +45,14 @@
         "unicorn/prevent-abbreviations": "off"
       }
     }
-  ]
+  ],
+  "rules": {
+    "sort-imports": [
+      "error",
+      {
+        "allowSeparatedGroups": true
+      }
+    ],
+    "sort-keys": "error"
+  }
 }

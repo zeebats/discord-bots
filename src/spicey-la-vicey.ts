@@ -1,10 +1,10 @@
 import fetch from 'cross-fetch';
 
 import {
-    getTitle,
+    getDescription,
     getLink,
     getTimestamp,
-    getDescription,
+    getTitle,
 } from '@utils/spicey-la-vicey';
 
 export type Mix = {

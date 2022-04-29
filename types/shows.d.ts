@@ -3,7 +3,7 @@ import { BaseProvider } from '@ts/justwatch';
 export type Show = {
     episode: string;
     link: string;
-    poster: string;
+    thumbnail: string;
     season: string;
     title: string;
 }

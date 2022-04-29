@@ -16,13 +16,13 @@ export const useWebhook = (
     const { content = '', embeds } = webhook;
 
     return fetch(ENV_DEV ? 'https://discord.com/api/webhooks/968566804601516062/38e5JqBq52HVTqODgIDsEJaZsf8oo8YFDtHmskxbMrv-Y_ceVFkVSQTSQ0V_8nouzn88' : url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
             content,
             embeds,
         }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
     });
 };
