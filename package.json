@@ -24,7 +24,7 @@
   "name": "discord-bots",
   "private": true,
   "scripts": {
-    "eslint": "eslint '**/*.{json,ts}'",
+    "eslint": "eslint '**/*.{json,mjs,ts}'",
     "eslint:fix": "npm run eslint -- --fix",
     "netlify": "netlify",
     "test": "vitest",
