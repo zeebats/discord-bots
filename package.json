@@ -25,6 +25,7 @@
   "scripts": {
     "eslint": "eslint '**/*.{json,ts}'",
     "eslint:fix": "npm run eslint -- --fix",
+    "lint-staged": "lint-staged --config '.lintstagedrc.mjs'",
     "netlify": "netlify",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
