@@ -84,6 +84,7 @@ sw.*
 .vscode/*
 !.vscode/tasks.json
 !.vscode/launch.json
+!.vscode/settings.json
 *.code-workspace
 !.vscode/*.code-snippets
 

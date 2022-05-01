@@ -1,3 +1,0 @@
-{
-  "*.{json,ts}": "npm run eslint:fix"
-}
