@@ -40,7 +40,7 @@ const handleUpdate = async (providers: Providers): Promise<void> => {
     });
 };
 
-export const handler: Handler = schedule('0 18 * * *', async (): Promise<{ statusCode: number; }> => {
+export const handler: Handler = schedule('0 19 * * *', async (): Promise<{ statusCode: number; }> => {
     try {
         const items: Providers = await getShows();
 
