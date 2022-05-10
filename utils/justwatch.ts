@@ -1,6 +1,10 @@
-import { HTMLElement, default as parse } from 'node-html-parser';
+const { NETLIFY_DEV } = process.env;
+
+import { HTMLElement, default as parseLocal, parse as parseProduction } from 'node-html-parser';
 
 import { selectedProviders } from '@enums/providers';
+
+const parse = NETLIFY_DEV ? parseLocal : parseProduction;
 
 export const getTitle = (item: HTMLElement | null): string => {
     const element = item?.querySelector('.picture-comp__img');
@@ -23,11 +27,6 @@ export const getLink = (element: HTMLElement | null): string => {
 };
 
 export const getToday = (string: string): HTMLElement | null => {
-    // eslint-disable-next-line no-console
-    console.info({
-        parse,
-    });
-
     const body = parse(string);
 
     return body.querySelector('.timeline__timeframe:first-child');
