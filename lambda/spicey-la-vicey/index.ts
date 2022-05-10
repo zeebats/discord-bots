@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/node';
+
 import { Handler, schedule } from '@netlify/functions';
 import { format, fromUnixTime, getHours } from 'date-fns';
 import { createClient } from '@supabase/supabase-js';
@@ -6,10 +8,15 @@ import { Mix, getNewestMix } from '@src/spicey-la-vicey';
 import { useWebhook } from '@src/webhook';
 
 const {
+    SENTRY_DSN,
     SUPABASE_URL,
     SUPABASE_API_KEY,
     WEBHOOK_SPICEY_LA_VICEY,
 } = process.env;
+
+Sentry.init({
+    dsn: SENTRY_DSN,
+});
 
 const $supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 
@@ -117,7 +124,9 @@ export const handler: Handler = schedule('0 0-12 * * 2', async () => {
         return {
             statusCode: 200,
         };
-    } catch {
+    } catch (error) {
+        Sentry.captureException(error);
+
         return {
             statusCode: 500,
         };

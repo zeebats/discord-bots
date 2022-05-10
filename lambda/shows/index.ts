@@ -1,10 +1,16 @@
+import * as Sentry from '@sentry/node';
+
 import { Handler, schedule } from '@netlify/functions';
 
 import { Providers } from '@ts/shows';
 import { getShows } from '@src/shows';
 import { useWebhook } from '@src/webhook';
 
-const { WEBHOOK_SHOWS } = process.env;
+const { SENTRY_DSN, WEBHOOK_SHOWS } = process.env;
+
+Sentry.init({
+    dsn: SENTRY_DSN,
+});
 
 const handleUpdate = async (providers: Providers): Promise<void> => {
     await useWebhook({
@@ -41,7 +47,9 @@ export const handler: Handler = schedule('0 16 * * *', async (): Promise<{ statu
         return {
             statusCode: 200,
         };
-    } catch {
+    } catch (error) {
+        Sentry.captureException(error);
+
         return {
             statusCode: 500,
         };
