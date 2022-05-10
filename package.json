@@ -9,6 +9,7 @@
     "esbuild": "0.14.38",
     "html-entities": "2.3.3",
     "isomorphic-unfetch": "3.1.0",
+    "netlify-plugin-discord": "0.0.2",
     "node-html-parser": "5.3.3"
   },
   "devDependencies": {

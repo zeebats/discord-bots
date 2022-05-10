@@ -8,6 +8,9 @@
   publish = "dist"
   port = 4448
 
+[[plugins]]
+  package = "netlify-plugin-discord"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
