@@ -6,7 +6,7 @@ import { Providers } from '@ts/shows';
 import { getShows } from '@src/shows';
 import { useWebhook } from '@src/webhook';
 
-const { SENTRY_DSN, WEBHOOK_SHOWS } = process.env;
+const { NETLIFY_DEV, SENTRY_DSN, WEBHOOK_SHOWS } = process.env;
 
 Sentry.init({
     dsn: SENTRY_DSN,
@@ -40,7 +40,7 @@ const handleUpdate = async (providers: Providers): Promise<void> => {
     });
 };
 
-export const handler: Handler = schedule('0 16 * * *', async (): Promise<{ statusCode: number; }> => {
+export const handler: Handler = schedule('0 18 * * *', async (): Promise<{ statusCode: number; }> => {
     try {
         const items: Providers = await getShows();
 
@@ -50,7 +50,12 @@ export const handler: Handler = schedule('0 16 * * *', async (): Promise<{ statu
             statusCode: 200,
         };
     } catch (error) {
-        Sentry.captureException(error);
+        if (NETLIFY_DEV) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+        } else {
+            Sentry.captureException(error);
+        }
 
         return {
             statusCode: 500,

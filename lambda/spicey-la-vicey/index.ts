@@ -8,6 +8,7 @@ import { Mix, getNewestMix } from '@src/spicey-la-vicey';
 import { useWebhook } from '@src/webhook';
 
 const {
+    NETLIFY_DEV,
     SENTRY_DSN,
     SUPABASE_URL,
     SUPABASE_API_KEY,
@@ -127,7 +128,12 @@ export const handler: Handler = schedule('0 0-12 * * 2', async () => {
             statusCode: 200,
         };
     } catch (error) {
-        Sentry.captureException(error);
+        if (NETLIFY_DEV) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+        } else {
+            Sentry.captureException(error);
+        }
 
         return {
             statusCode: 500,
