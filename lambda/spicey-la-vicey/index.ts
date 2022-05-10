@@ -18,6 +18,8 @@ Sentry.init({
     dsn: SENTRY_DSN,
 });
 
+Sentry.setTag('bot', 'spicey-la-vicey');
+
 const $supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 
 const handleBefore = async () => {
