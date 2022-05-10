@@ -1,4 +1,4 @@
-import parse, { HTMLElement } from 'node-html-parser';
+import { HTMLElement, default as parse } from 'node-html-parser';
 
 import { selectedProviders } from '@enums/providers';
 
@@ -23,6 +23,11 @@ export const getLink = (element: HTMLElement | null): string => {
 };
 
 export const getToday = (string: string): HTMLElement | null => {
+    // eslint-disable-next-line no-console
+    console.info({
+        parse,
+    });
+
     const body = parse(string);
 
     return body.querySelector('.timeline__timeframe:first-child');
