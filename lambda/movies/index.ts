@@ -12,6 +12,8 @@ Sentry.init({
     dsn: SENTRY_DSN,
 });
 
+Sentry.setTag('bot', 'movies');
+
 const handleUpdate = async (providers: Providers): Promise<void> => {
     await useWebhook({
         url: WEBHOOK_MOVIES,
