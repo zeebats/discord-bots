@@ -27,6 +27,7 @@ export const formatShows = (response: string): Providers => {
 };
 
 export const getShows = async (): Promise<Providers> => {
+    // https://www.justwatch.com/us/tv-shows/new?providers=amp,atp,dnp,hbm,hlu,nfx
     const request = await fetch(`https://www.justwatch.com/us/tv-shows/new?providers=${Object.keys(selectedProviders).join(',')}`);
     const response = await request.text();
 
