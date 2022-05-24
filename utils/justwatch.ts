@@ -7,9 +7,9 @@ import { selectedProviders } from '@enums/providers';
 const parse = NETLIFY_DEV ? parseLocal : parseProduction;
 
 export const getTitle = (item: HTMLElement | null): string => {
-    const element = item?.querySelector('.picture-comp__img');
+    const element = item?.querySelector('.picture-comp__img')?.getAttribute('alt') || item?.querySelector('.title-poster--no-poster')?.innerText;
 
-    return element?.getAttribute('alt')?.replace(/\s*-\s*season \d*/i, '') || '';
+    return element?.replace(/\s*-\s*season \d*/i, '') || '';
 };
 
 export const getThumbnail = (item: HTMLElement | null): string => {
@@ -17,11 +17,11 @@ export const getThumbnail = (item: HTMLElement | null): string => {
 
     const attribute = source?.getAttribute('srcset') || source?.getAttribute('data-srcset') || '';
 
-    return attribute?.replace(/.*?, (.*?) 2x/, '$1');
+    return attribute?.replace(/.*?, (.*?)/, '$1');
 };
 
 export const getLink = (element: HTMLElement | null): string => {
-    const link = element?.getAttribute('href') || '';
+    const link = element?.querySelector('a')?.getAttribute('href') || '';
 
     return `https://www.justwatch.com${link}`;
 };
@@ -39,7 +39,7 @@ export const getProviders = (element: HTMLElement | null): HTMLElement[] => {
 };
 
 export const getProvider = (element: HTMLElement | null): string => {
-    const provider = element?.querySelector('.timeline__provider-block__logo');
+    const provider = element?.querySelector('.provider-timeline__logo');
 
     return provider?.getAttribute('alt') || '';
 };
