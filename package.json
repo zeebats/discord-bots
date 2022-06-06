@@ -15,7 +15,7 @@
   "devDependencies": {
     "@commitlint/cli": "17.0.2",
     "@commitlint/config-conventional": "17.0.2",
-    "@zeebats/eslint-config": "1.0.2",
+    "@zeebats/eslint-config": "1.1.0",
     "c8": "7.11.3",
     "eslint-plugin-jsonc": "2.3.0",
     "netlify-cli": "10.4.0",
