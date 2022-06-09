@@ -1,6 +1,6 @@
 export default {
-    '*.{json,mjs,ts}?(x)': (filenames) => [
+    '*.{json,mjs,ts}?(x)': filenames => [
         `eslint ${filenames.join(' ')}`,
-        `vitest ${filenames.join(' ')} --passWithNoTests`
-    ]
-}
+        `vitest ${filenames.join(' ')} --passWithNoTests`,
+    ],
+};

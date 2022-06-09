@@ -1,5 +1,7 @@
 import fetch from 'cross-fetch';
 
+import { selectedProviders } from '@enums/providers';
+import { Providers } from '@ts/movies';
 import {
     getColor,
     getProvider,
@@ -7,10 +9,7 @@ import {
     getThumbnail,
     getToday,
 } from '@utils/justwatch';
-
 import { getMovieItems, getProviderLink } from '@utils/movies';
-import { Providers } from '@ts/movies';
-import { selectedProviders } from '@enums/providers';
 
 export const formatMovies = (response: string): Providers => {
     const today = getToday(response);

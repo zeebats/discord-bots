@@ -1,5 +1,5 @@
 namespace NodeJS {
-    interface ProcessEnv {
+    interface ProcessEnvironment {
         SUPABASE_API_KEY: string;
         SUPABASE_URL: string;
         WEBHOOK_MOVIES: string;

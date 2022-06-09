@@ -1,8 +1,8 @@
-const { NETLIFY_DEV } = process.env;
-
 import { HTMLElement, default as parseLocal, parse as parseProduction } from 'node-html-parser';
 
 import { selectedProviders } from '@enums/providers';
+
+const { NETLIFY_DEV } = process.env;
 
 const parse = NETLIFY_DEV ? parseLocal : parseProduction;
 
