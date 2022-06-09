@@ -9,8 +9,8 @@ import { useWebhook } from '@src/webhook';
 const {
     NETLIFY_DEV,
     SENTRY_DSN,
-    SUPABASE_API_KEY,
-    SUPABASE_URL,
+    SUPABASE_API_KEY = '',
+    SUPABASE_URL = '',
     WEBHOOK_SPICEY_LA_VICEY,
 } = process.env;
 
