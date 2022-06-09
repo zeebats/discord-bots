@@ -1,13 +1,12 @@
 import { HTMLElement } from 'node-html-parser';
 
+import { Shows } from '@ts/shows';
 import {
     getLink,
     getShortcode,
     getThumbnail,
     getTitle,
 } from '@utils/justwatch';
-
-import { Shows } from '@ts/shows';
 
 export const getSeason = (item: HTMLElement | null): string => {
     const element = item?.querySelector('.title-poster__badge');

@@ -1,13 +1,12 @@
 import { HTMLElement } from 'node-html-parser';
 
+import { Movies } from '@ts/movies';
 import {
     getLink,
     getShortcode,
     getThumbnail,
     getTitle,
 } from '@utils/justwatch';
-
-import { Movies } from '@ts/movies';
 
 export const getMovieItems = (element: HTMLElement | null): Movies => {
     const items = element?.querySelectorAll('.horizontal-title-list__item') || [];

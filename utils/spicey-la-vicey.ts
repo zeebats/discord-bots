@@ -1,5 +1,4 @@
 import { getUnixTime, parse, startOfDay } from 'date-fns';
-
 import { decode } from 'html-entities';
 
 export const getTitle = (string: string): string => {
@@ -9,7 +8,9 @@ export const getTitle = (string: string): string => {
         return '';
     }
 
-    const [, value] = match;
+    const [
+        , value,
+    ] = match;
 
     return decode(value);
 };
@@ -21,7 +22,9 @@ export const getDescription = (string: string): string => {
         return '';
     }
 
-    const [, value] = match;
+    const [
+        , value,
+    ] = match;
 
     return decode(value);
 };
@@ -33,7 +36,9 @@ export const getLink = (string: string): string => {
         return '';
     }
 
-    const [, value] = match;
+    const [
+        , value,
+    ] = match;
 
     return decode(`https://www.bbc.co.uk${value}`);
 };
@@ -45,7 +50,9 @@ export const getTimestamp = (string: string): number => {
         return 0;
     }
 
-    const [, value] = match;
+    const [
+        , value,
+    ] = match;
 
     return getUnixTime(startOfDay(parse(value, 'dd LLL yyyy', Date.now())));
 };

@@ -1,23 +1,20 @@
-import * as Sentry from '@sentry/node';
-
 import { Handler, schedule } from '@netlify/functions';
-import { format, fromUnixTime, getHours } from 'date-fns';
+import * as Sentry from '@sentry/node';
 import { createClient } from '@supabase/supabase-js';
+import { format, fromUnixTime, getHours } from 'date-fns';
 
-import { Mix, getNewestMix } from '@src/spicey-la-vicey';
+import { getNewestMix, Mix } from '@src/spicey-la-vicey';
 import { useWebhook } from '@src/webhook';
 
 const {
     NETLIFY_DEV,
     SENTRY_DSN,
-    SUPABASE_URL,
     SUPABASE_API_KEY,
+    SUPABASE_URL,
     WEBHOOK_SPICEY_LA_VICEY,
 } = process.env;
 
-Sentry.init({
-    dsn: SENTRY_DSN,
-});
+Sentry.init({ dsn: SENTRY_DSN });
 
 Sentry.setTag('bot', 'spicey-la-vicey');
 
@@ -26,9 +23,7 @@ const $supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 const handleBefore = async () => {
     await $supabase
         .from('spicey-la-vicey')
-        .update({
-            update: true,
-        })
+        .update({ update: true })
         .eq('id', 1);
 };
 
@@ -61,12 +56,8 @@ const handleUpdate = async (item: Mix) => {
                             value: '**[All episodes](https://www.bbc.co.uk/sounds/brand/b09c12lj)**',
                         },
                     ],
-                    footer: {
-                        text: `Posted on: ${format(fromUnixTime(item.timestamp), 'dd MMMM')}`,
-                    },
-                    thumbnail: {
-                        url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700',
-                    },
+                    footer: { text: `Posted on: ${format(fromUnixTime(item.timestamp), 'dd MMMM')}` },
+                    thumbnail: { url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700' },
                     title: item.title,
                     url: item.link,
                 },
@@ -78,9 +69,7 @@ const handleUpdate = async (item: Mix) => {
 const handleFinally = async () => {
     await $supabase
         .from('spicey-la-vicey')
-        .update({
-            update: false,
-        })
+        .update({ update: false })
         .eq('id', 1);
 
     await useWebhook({
@@ -110,7 +99,9 @@ export const handler: Handler = schedule('0 0-12 * * 2', async () => {
             .limit(1)
             .single();
 
-        const { timestamp, title, update } = data;
+        const {
+            timestamp, title, update,
+        } = data;
 
         if (currentHour === 0 && !update) {
             await handleBefore();
@@ -124,9 +115,7 @@ export const handler: Handler = schedule('0 0-12 * * 2', async () => {
             await handleFinally();
         }
 
-        return {
-            statusCode: 200,
-        };
+        return { statusCode: 200 };
     } catch (error) {
         if (NETLIFY_DEV) {
             // eslint-disable-next-line no-console
@@ -135,8 +124,6 @@ export const handler: Handler = schedule('0 0-12 * * 2', async () => {
             Sentry.captureException(error);
         }
 
-        return {
-            statusCode: 500,
-        };
+        return { statusCode: 500 };
     }
 });
