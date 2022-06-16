@@ -24,8 +24,11 @@ jobs:
       - name: Run ESLint
         run: npm run eslint
 
-      - name: Run Typescript checker
-        run: npm run typecheck
+      - name: Run TypeScript checker
+        run: "npm run check:types"
+
+      - name: Run CasePolice
+        run: "npm run check:case:fix"
 
       # - name: Run tests
       #   run: npm run test
