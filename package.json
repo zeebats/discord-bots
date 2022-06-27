@@ -28,7 +28,7 @@
     "node-html-parser": "5.3.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.0.2",
+    "@commitlint/cli": "17.0.3",
     "@commitlint/config-conventional": "17.0.3",
     "@zeebats/eslint-config": "1.2.0",
     "c8": "7.11.3",
