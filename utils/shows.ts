@@ -1,12 +1,7 @@
 import { HTMLElement } from 'node-html-parser';
 
 import { Shows } from '@ts/shows';
-import {
-	getLink,
-	getShortcode,
-	getThumbnail,
-	getTitle,
-} from '@utils/justwatch';
+import { getLink, getThumbnail, getTitle } from '@utils/justwatch';
 
 export const getSeason = (item: HTMLElement | null): string => {
 	const element = item?.querySelector('.title-poster__badge');
@@ -30,10 +25,4 @@ export const getShowItems = (element: HTMLElement | null): Shows => {
 		thumbnail: getThumbnail(item),
 		title: getTitle(item),
 	})) || [];
-};
-
-export const getProviderLink = (element: HTMLElement | null): string => {
-	const provider = getShortcode(element);
-
-	return `https://www.justwatch.com/us/tv-shows/new=${provider}`;
 };
