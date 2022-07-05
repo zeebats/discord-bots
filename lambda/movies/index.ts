@@ -6,8 +6,8 @@ import { Providers } from '@ts/movies';
 import { handleSentryError, default as Sentry } from '@utils/sentry';
 
 const {
-    SENTRY_DSN,
-    WEBHOOK_MOVIES,
+	SENTRY_DSN,
+	WEBHOOK_MOVIES,
 } = process.env;
 
 Sentry.init({ dsn: SENTRY_DSN });
@@ -15,45 +15,45 @@ Sentry.init({ dsn: SENTRY_DSN });
 Sentry.setTag('bot', 'movies');
 
 const handleUpdate = (providers: Providers): Promise<Response> => useWebhook({
-    url: WEBHOOK_MOVIES,
-    webhook: {
-        embeds: providers.map(({
-            color,
-            movies,
-            provider,
-            thumbnail,
-            url,
-        }) => ({
-            color,
-            fields: movies.map(movie => ({
-                name: movie.title,
-                value: `[🔗 Link](${movie.link})`,
-            })),
-            thumbnail: { url: thumbnail },
-            title: `New on ${provider}`,
-            url,
-        })),
-    },
+	url: WEBHOOK_MOVIES,
+	webhook: {
+		embeds: providers.map(({
+			color,
+			movies,
+			provider,
+			thumbnail,
+			url,
+		}) => ({
+			color,
+			fields: movies.map(movie => ({
+				name: movie.title,
+				value: `[🔗 Link](${movie.link})`,
+			})),
+			thumbnail: { url: thumbnail },
+			title: `New on ${provider}`,
+			url,
+		})),
+	},
 
 });
 
 export const handler: Handler = schedule('0 16 * * *', async (): Promise<{ statusCode: number; }> => {
-    try {
-        const items: Providers = await getMovies();
+	try {
+		const items: Providers = await getMovies();
 
-        const {
-            ok,
-            ...response
-        } = await handleUpdate(items);
+		const {
+			ok,
+			...response
+		} = await handleUpdate(items);
 
-        if (!ok) {
-            throw response;
-        }
+		if (!ok) {
+			throw response;
+		}
 
-        return { statusCode: 200 };
-    } catch (error: unknown) {
-        handleSentryError(Sentry, error);
+		return { statusCode: 200 };
+	} catch (error: unknown) {
+		handleSentryError(Sentry, error);
 
-        return { statusCode: 500 };
-    }
+		return { statusCode: 500 };
+	}
 });
