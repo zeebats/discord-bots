@@ -2,38 +2,38 @@ import { HTMLElement } from 'node-html-parser';
 
 import { Shows } from '@ts/shows';
 import {
-    getLink,
-    getShortcode,
-    getThumbnail,
-    getTitle,
+	getLink,
+	getShortcode,
+	getThumbnail,
+	getTitle,
 } from '@utils/justwatch';
 
 export const getSeason = (item: HTMLElement | null): string => {
-    const element = item?.querySelector('.title-poster__badge');
+	const element = item?.querySelector('.title-poster__badge');
 
-    return element?.innerText?.toLowerCase() || '';
+	return element?.innerText?.toLowerCase() || '';
 };
 
 export const getEpisode = (item: HTMLElement | null): string => {
-    const element = item?.querySelector('.title-poster__badge__new');
+	const element = item?.querySelector('.title-poster__badge__new');
 
-    return element?.innerText?.toLowerCase()?.replace('new ', '1 ') || '';
+	return element?.innerText?.toLowerCase()?.replace('new ', '1 ') || '';
 };
 
 export const getShowItems = (element: HTMLElement | null): Shows => {
-    const items = element?.querySelectorAll('.horizontal-title-list__item') || [];
+	const items = element?.querySelectorAll('.horizontal-title-list__item') || [];
 
-    return items.map(item => ({
-        episode: getEpisode(item),
-        link: getLink(item),
-        season: getSeason(item),
-        thumbnail: getThumbnail(item),
-        title: getTitle(item),
-    })) || [];
+	return items.map(item => ({
+		episode: getEpisode(item),
+		link: getLink(item),
+		season: getSeason(item),
+		thumbnail: getThumbnail(item),
+		title: getTitle(item),
+	})) || [];
 };
 
 export const getProviderLink = (element: HTMLElement | null): string => {
-    const provider = getShortcode(element);
+	const provider = getShortcode(element);
 
-    return `https://www.justwatch.com/us/tv-shows/new=${provider}`;
+	return `https://www.justwatch.com/us/tv-shows/new=${provider}`;
 };

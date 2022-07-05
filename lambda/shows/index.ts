@@ -6,7 +6,7 @@ import { Providers } from '@ts/shows';
 import { handleSentryError, default as Sentry } from '@utils/sentry';
 
 const {
-    SENTRY_DSN, WEBHOOK_SHOWS,
+	SENTRY_DSN, WEBHOOK_SHOWS,
 } = process.env;
 
 Sentry.init({ dsn: SENTRY_DSN });
@@ -14,43 +14,43 @@ Sentry.init({ dsn: SENTRY_DSN });
 Sentry.setTag('bot', 'shows');
 
 const handleUpdate = (providers: Providers): Promise<Response> => useWebhook({
-    url: WEBHOOK_SHOWS,
-    webhook: {
-        embeds: providers.map(({
-            color,
-            provider,
-            shows,
-            thumbnail,
-            url,
-        }) => ({
-            color,
-            fields: shows.map(show => ({
-                name: show.title,
-                value: `[${show.episode} in ${show.season}](${show.link})`,
-            })),
-            thumbnail: { url: thumbnail },
-            title: `New on ${provider}`,
-            url,
-        })),
-    },
+	url: WEBHOOK_SHOWS,
+	webhook: {
+		embeds: providers.map(({
+			color,
+			provider,
+			shows,
+			thumbnail,
+			url,
+		}) => ({
+			color,
+			fields: shows.map(show => ({
+				name: show.title,
+				value: `[${show.episode} in ${show.season}](${show.link})`,
+			})),
+			thumbnail: { url: thumbnail },
+			title: `New on ${provider}`,
+			url,
+		})),
+	},
 });
 
 export const handler: Handler = schedule('0 16 * * *', async (): Promise<{ statusCode: number; }> => {
-    try {
-        const items: Providers = await getShows();
+	try {
+		const items: Providers = await getShows();
 
-        const {
-            ok, ...response
-        } = await handleUpdate(items);
+		const {
+			ok, ...response
+		} = await handleUpdate(items);
 
-        if (!ok) {
-            throw response;
-        }
+		if (!ok) {
+			throw response;
+		}
 
-        return { statusCode: 200 };
-    } catch (error: unknown) {
-        handleSentryError(Sentry, error);
+		return { statusCode: 200 };
+	} catch (error: unknown) {
+		handleSentryError(Sentry, error);
 
-        return { statusCode: 500 };
-    }
+		return { statusCode: 500 };
+	}
 });
