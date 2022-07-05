@@ -1,10 +1,16 @@
-import { HTMLElement, default as parseLocal, parse as parseProduction } from 'node-html-parser';
+import { HTMLElement, parse } from 'node-html-parser';
 
 import { selectedProviders } from '@enums/providers';
 
-const { NETLIFY_DEV } = process.env;
+export interface JustWatchResponse {
+	response: string;
+	url: string;
+}
 
-const parse = NETLIFY_DEV ? parseLocal : parseProduction;
+export interface TodayResponse {
+	element: HTMLElement;
+	url: string;
+}
 
 export const getTitle = (item: HTMLElement | null): string => {
 	const element = item?.querySelector('.picture-comp__img')?.getAttribute('alt') || item?.querySelector('.title-poster--no-poster')?.innerText;
@@ -26,22 +32,33 @@ export const getLink = (element: HTMLElement | null): string => {
 	return `https://www.justwatch.com${link}`;
 };
 
-export const getToday = (string: string): HTMLElement | null => {
-	const body = parse(string);
+export const getToday = (responses: JustWatchResponse[]): TodayResponse[] => {
+	const parsed = responses.map(({
+		response,
+		url,
+	}): TodayResponse => {
+		const body = parse(response);
 
-	return body.querySelector('.timeline__timeframe:first-child');
-};
+		const firstChild = body.querySelector('.timeline__timeframe:first-child');
 
-export const getProviders = (element: HTMLElement | null): HTMLElement[] => {
-	const providers = element?.querySelectorAll('.timeline__provider-block');
+		const header = firstChild?.querySelector('.timeline__header');
 
-	return providers || [];
-};
+		if (header?.innerText !== 'Today') {
+			return {
+				element: parse(''),
+				url,
+			};
+		}
 
-export const getProvider = (element: HTMLElement | null): string => {
-	const provider = element?.querySelector('.provider-timeline__logo');
+		return {
+			element: firstChild?.querySelector('.timeline__provider-block') || parse(''),
+			url,
+		};
+	});
 
-	return provider?.getAttribute('alt') || '';
+	const filtered = parsed.filter(({ element }): boolean => element.textContent.trim() !== '');
+
+	return filtered;
 };
 
 export const getShortcode = (element: HTMLElement | null): string => {
@@ -55,3 +72,15 @@ export const getColor = (element: HTMLElement | null): number => {
 
 	return selectedProviders[provider]?.color || 15_724_527;
 };
+
+export const getProviderName = (element: HTMLElement | null): string => {
+	const provider = getShortcode(element);
+
+	const [
+		, selected,
+	] = Object.entries(selectedProviders).find(([key]): boolean => key === provider) || [];
+
+	return selected?.name || '';
+};
+
+export const getProviderLink = (providerSlug: string, type: string): string => `https://www.justwatch.com/us/provider/${providerSlug}/new/${type}`;

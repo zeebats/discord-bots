@@ -35,9 +35,18 @@ const handleUpdate = (providers: Providers): Promise<Response> => useWebhook({
 	},
 });
 
+const handleEmpty = (): Promise<Response> => useWebhook({
+	url: WEBHOOK_SHOWS,
+	webhook: { embeds: [{ title: 'No new shows today!' }] },
+});
+
 export const handler: Handler = schedule('0 16 * * *', async (): Promise<{ statusCode: number; }> => {
 	try {
 		const items: Providers = await getShows();
+
+		if (items.length === 0) {
+			handleEmpty();
+		}
 
 		const {
 			ok, ...response

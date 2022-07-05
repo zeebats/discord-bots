@@ -1,34 +1,46 @@
 import fetch from 'cross-fetch';
 
 import { selectedProviders } from '@enums/providers';
-import { Providers } from '@ts/movies';
+import { Provider, Providers } from '@ts/movies';
 import {
 	getColor,
-	getProvider,
-	getProviders,
+	getProviderLink,
+	getProviderName,
 	getThumbnail,
 	getToday,
+	JustWatchResponse,
 } from '@utils/justwatch';
-import { getMovieItems, getProviderLink } from '@utils/movies';
+import { getMovieItems } from '@utils/movies';
 
-export const formatMovies = (response: string): Providers => {
-	const today = getToday(response);
+export const formatMovies = (responses: JustWatchResponse[]): Providers => {
+	const today = getToday(responses);
 
-	const providers = getProviders(today);
-
-	return providers.map(provider => ({
-		color: getColor(provider),
-		movies: getMovieItems(provider),
-		provider: getProvider(provider),
-		thumbnail: getThumbnail(provider),
-		url: getProviderLink(provider),
+	return today.map(({
+		element,
+		url,
+	}) : Provider => ({
+		color: getColor(element),
+		movies: getMovieItems(element),
+		provider: getProviderName(element),
+		thumbnail: getThumbnail(element),
+		url,
 	})) || [];
 };
 
 export const getMovies = async (): Promise<Providers> => {
-	// https://www.justwatch.com/us/movies/new?providers=amp,atp,dnp,hbm,hlu,nfx
-	const request = await fetch(`https://www.justwatch.com/us/movies/new?providers=${Object.keys(selectedProviders).join(',')}`);
-	const response = await request.text();
+	const collected = await Promise.all(
+		Object.values(selectedProviders).map(async ({ slug }): Promise<JustWatchResponse> => {
+			const url = getProviderLink(slug, 'movies');
 
-	return formatMovies(response);
+			const request = await fetch(url);
+			const response = await request.text();
+
+			return {
+				response,
+				url,
+			};
+		}),
+	);
+
+	return formatMovies(collected);
 };
