@@ -37,6 +37,6 @@
 		"netlify-cli": "10.7.1",
 		"simple-git-hooks": "2.8.0",
 		"typescript": "4.7.4",
-		"vitest": "0.17.0"
+		"vitest": "0.17.1"
 	}
 }
