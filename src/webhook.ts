@@ -3,6 +3,8 @@ import { RESTPostAPIWebhookWithTokenJSONBody } from 'discord-api-types/rest/v10/
 
 import { ENV_DEV } from '@utils/netlify';
 
+const { WEBHOOK_TEST } = process.env;
+
 export const useWebhook = (
 	{
 		url,
@@ -19,7 +21,7 @@ export const useWebhook = (
 	let fetchURL = url;
 
 	if (ENV_DEV) {
-		fetchURL = 'https://discord.com/api/webhooks/968566804601516062/38e5JqBq52HVTqODgIDsEJaZsf8oo8YFDtHmskxbMrv-Y_ceVFkVSQTSQ0V_8nouzn88';
+		fetchURL = WEBHOOK_TEST;
 	}
 
 	if (!fetchURL) {
