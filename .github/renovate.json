@@ -1,0 +1,11 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"baseBranches": ["updates"],
+	"extends": [
+		"config:base",
+		":automergeMinor",
+		":disableDependencyDashboard",
+		"group:allNonMajor"
+	],
+	"timezone": "Europe/Amsterdam"
+}
