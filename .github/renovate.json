@@ -5,7 +5,8 @@
 		"config:base",
 		":automergeMinor",
 		":disableDependencyDashboard",
-		"group:allNonMajor"
+		"group:allNonMajor",
+		"schedule:weekends"
 	],
 	"timezone": "Europe/Amsterdam"
 }
