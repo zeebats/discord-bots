@@ -87,7 +87,7 @@ const handleFinally = async () => {
 };
 
 // eslint-disable-next-line max-statements
-export const handler: Handler = schedule('0 0-12 * * 2', async () => {
+export const handler: Handler = schedule('0 0-12 * * 1', async () => {
 	try {
 		const currentHour = getHours(Date.now());
 
