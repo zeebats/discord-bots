@@ -9,7 +9,7 @@
 		"eslint": "eslint '**/*.{json,mjs,ts}'",
 		"eslint:fix": "npm run eslint -- --fix",
 		"netlify": "netlify",
-		"test": "vitest",
+		"test": "vitest run",
 		"test:coverage": "vitest run --coverage",
 		"update": "npx npm-check -uE"
 	},

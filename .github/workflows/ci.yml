@@ -21,6 +21,9 @@ jobs:
       - name: NPM install
         run: npm install
 
+      - name: Run Vitest
+        run: "npm run test"
+
       - name: Run ESLint
         run: npm run eslint
 
