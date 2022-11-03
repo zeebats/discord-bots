@@ -14,6 +14,7 @@
 		"update": "npx npm-check -uE"
 	},
 	"dependencies": {
+		"@js-temporal/polyfill": "0.4.3",
 		"@netlify/functions": "1.2.0",
 		"@sentry/node": "7.13.0",
 		"@supabase/supabase-js": "1.35.6",
