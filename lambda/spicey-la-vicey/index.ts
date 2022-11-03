@@ -6,6 +6,8 @@ import { format, fromUnixTime, getHours } from 'date-fns';
 import { getNewestMix, Mix } from '@src/spicey-la-vicey';
 import { useWebhook } from '@src/webhook';
 
+import type { Database } from '@ts/supabase.d';
+
 const {
 	NETLIFY_DEV,
 	SENTRY_DSN,
@@ -18,16 +20,16 @@ Sentry.init({ dsn: SENTRY_DSN });
 
 Sentry.setTag('bot', 'spicey-la-vicey');
 
-const $supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
+const $supabase = createClient<Database>(SUPABASE_URL, SUPABASE_API_KEY);
 
-const handleBefore = async () => {
+const handleBefore = async (): Promise<void> => {
 	await $supabase
 		.from('spicey-la-vicey')
 		.update({ update: true })
 		.eq('id', 1);
 };
 
-const handleUpdate = async (item: Mix) => {
+const handleUpdate = async (item: Mix): Promise<void> => {
 	await $supabase
 		.from('spicey-la-vicey')
 		.update({
@@ -66,7 +68,7 @@ const handleUpdate = async (item: Mix) => {
 	});
 };
 
-const handleFinally = async () => {
+const handleFinally = async (): Promise<void> => {
 	await $supabase
 		.from('spicey-la-vicey')
 		.update({ update: false })
@@ -86,8 +88,8 @@ const handleFinally = async () => {
 	});
 };
 
-// eslint-disable-next-line max-statements
-export const handler: Handler = schedule('0 0-12 * * 1', async () => {
+// eslint-disable-next-line max-statements, complexity
+export const handler: Handler = schedule('0 0-12 * * 1', async (): Promise<{ statusCode: number; }> => {
 	try {
 		const currentHour = getHours(Date.now());
 
@@ -100,14 +102,16 @@ export const handler: Handler = schedule('0 0-12 * * 1', async () => {
 			.single();
 
 		const {
-			timestamp, title, update,
-		} = data;
+			timestamp,
+			title,
+			update,
+		} = data || {};
 
 		if (currentHour === 0 && !update) {
 			await handleBefore();
 		}
 
-		if (mix.timestamp > timestamp && mix.title !== title) {
+		if (timestamp && mix.timestamp > timestamp && mix.title !== title) {
 			await handleUpdate(mix);
 		}
 
