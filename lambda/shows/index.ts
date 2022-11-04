@@ -43,7 +43,7 @@ const handleEmpty = (): Promise<Response> => useWebhook({
 });
 
 // eslint-disable-next-line max-statements
-export const handler: Handler = schedule('0 16 * * *', async (): Promise<{ statusCode: number; }> => {
+export const handler: Handler = schedule('0 16-17 * * *', async (): Promise<{ statusCode: number; }> => {
 	try {
 		if (escapeDST()) {
 			return { statusCode: 200 };
