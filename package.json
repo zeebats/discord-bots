@@ -24,7 +24,7 @@
 		"discord-api-types": "0.37.25",
 		"esbuild": "0.16.12",
 		"html-entities": "2.3.3",
-		"isomorphic-unfetch": "3.1.0",
+		"isomorphic-unfetch": "4.0.2",
 		"netlify-plugin-discord": "0.0.2",
 		"node-html-parser": "6.1.4"
 	},
