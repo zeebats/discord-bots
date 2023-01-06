@@ -6,13 +6,22 @@ import { getLink, getThumbnail, getTitle } from '@utils/justwatch';
 export const getSeason = (item: HTMLElement | null): string => {
 	const element = item?.querySelector('.title-poster__badge');
 
-	return element?.innerText?.toLowerCase() || '';
+	return `Season ${element?.innerText?.replace(/season /i, '')?.padStart(2, '0')}` || '';
 };
 
 export const getEpisode = (item: HTMLElement | null): string => {
 	const element = item?.querySelector('.title-poster__badge__new');
 
-	return element?.innerText?.toLowerCase()?.replace('new ', '1 ') || '';
+	const unmodified = element?.innerText?.toLowerCase()?.split(' ');
+	const modified = unmodified?.map(string => {
+		if ((/episode/).test(string)) {
+			return string;
+		}
+
+		return `${string.replace(/new/i, '1').padStart(2, '0')} new`;
+	});
+
+	return modified?.join(' ') || '';
 };
 
 export const getShowItems = (element: HTMLElement | null): Shows => {
@@ -24,5 +33,5 @@ export const getShowItems = (element: HTMLElement | null): Shows => {
 		season: getSeason(item),
 		thumbnail: getThumbnail(item),
 		title: getTitle(item),
-	})) || [];
+	})).sort((a, b): number => `${a.title} ${a.season}`.localeCompare(`${b.title} ${b.season}`)) || [];
 };

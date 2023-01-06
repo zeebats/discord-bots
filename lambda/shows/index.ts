@@ -28,7 +28,7 @@ const handleUpdate = (providers: Providers): Promise<Response> => useWebhook({
 			color,
 			fields: shows.map(show => ({
 				name: show.title,
-				value: `[${show.episode} in ${show.season}](${show.link})`,
+				value: `[${show.season} — ${show.episode}](${show.link})`,
 			})),
 			thumbnail: { url: thumbnail },
 			title: `New on ${provider}`,

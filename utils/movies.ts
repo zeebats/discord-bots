@@ -10,5 +10,5 @@ export const getMovieItems = (element: HTMLElement | null): Movies => {
 		link: getLink(item),
 		thumbnail: getThumbnail(item),
 		title: getTitle(item),
-	})) || [];
+	})).sort((a, b): number => a.title.localeCompare(b.title)) || [];
 };
