@@ -6,7 +6,6 @@ import {
 	getColor,
 	getProviderLink,
 	getProviderName,
-	getThumbnail,
 	getToday,
 	JustWatchResponse,
 } from '@utils/justwatch';
@@ -18,12 +17,18 @@ export const formatShows = (responses: JustWatchResponse[]): Providers => {
 	return today.map(({
 		element,
 		url,
-	}) : Provider => ({
+	}) : Omit<Provider, 'thumbnail'> => ({
 		color: getColor(element),
 		provider: getProviderName(element),
 		shows: getShowItems(element),
-		thumbnail: getThumbnail(element),
 		url,
+	})).map(({
+		shows,
+		...properties
+	}) : Provider => ({
+		...properties,
+		shows,
+		thumbnail: shows[0].thumbnail,
 	})) || [];
 };
 
