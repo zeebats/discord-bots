@@ -1,1 +1,4 @@
-{ "extends": ["@zeebats/eslint-config/typescript"] }
+{
+	"extends": ["@zeebats/eslint-config/typescript"],
+	"ignorePatterns": ["coverage/**/*"]
+}

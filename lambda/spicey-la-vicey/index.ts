@@ -3,10 +3,10 @@ import * as Sentry from '@sentry/node';
 import { createClient } from '@supabase/supabase-js';
 import { format, fromUnixTime, getHours } from 'date-fns';
 
-import { getNewestMix, Mix } from '@src/spicey-la-vicey';
-import { useWebhook } from '@src/webhook';
+import { getNewestMix, Mix } from '@/src/spicey-la-vicey';
+import { useWebhook } from '@/src/webhook';
 
-import type { Database } from '@ts/supabase.d';
+import type { Database } from '@/types/supabase';
 
 const {
 	NETLIFY_DEV,

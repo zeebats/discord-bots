@@ -5,7 +5,7 @@ import {
 	getLink,
 	getTimestamp,
 	getTitle,
-} from '@utils/spicey-la-vicey';
+} from '@/utils/spicey-la-vicey';
 
 export type Mix = {
     description: string;

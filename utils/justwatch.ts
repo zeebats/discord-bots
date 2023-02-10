@@ -1,6 +1,6 @@
 import { HTMLElement, parse } from 'node-html-parser';
 
-import { selectedProviders } from '@enums/providers';
+import { selectedProviders } from '@/enums/providers';
 
 export interface JustWatchResponse {
 	response: string;

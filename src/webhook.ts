@@ -1,7 +1,8 @@
 import fetch from 'cross-fetch';
-import { RESTPostAPIWebhookWithTokenJSONBody } from 'discord-api-types/rest/v10/webhook';
 
-import { ENV_DEV } from '@utils/netlify';
+import { ENV_DEV } from '@/utils/netlify';
+
+import type { RESTPostAPIWebhookWithTokenJSONBody } from 'discord-api-types/v10';
 
 const { WEBHOOK_TEST } = process.env;
 

@@ -1,4 +1,4 @@
-import { BaseProvider } from '@ts/justwatch';
+import type { BaseProvider } from '@/types/justwatch';
 
 export type Show = {
     episode: string;

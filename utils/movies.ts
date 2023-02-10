@@ -1,7 +1,7 @@
-import { HTMLElement } from 'node-html-parser';
+import { getLink, getThumbnail, getTitle } from '@/utils/justwatch';
 
-import { Movies } from '@ts/movies';
-import { getLink, getThumbnail, getTitle } from '@utils/justwatch';
+import type { Movies } from '@/types/movies';
+import type { HTMLElement } from 'node-html-parser';
 
 export const getMovieItems = (element: HTMLElement | null): Movies => {
 	const items = element?.querySelectorAll('.horizontal-title-list__item') || [];

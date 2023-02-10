@@ -2,16 +2,16 @@
 	"name": "discord-bots",
 	"version": "1.0.0",
 	"private": true,
+	"type": "module",
 	"scripts": {
-		"check:case": "case-police",
+		"check:case": "case-police --ignore '**/coverage/**'",
 		"check:case:fix": "npm run check:case --fix",
 		"check:types": "tsc",
 		"eslint": "eslint '**/*.{json,mjs,ts}'",
 		"eslint:fix": "npm run eslint -- --fix",
 		"netlify": "netlify",
 		"test": "vitest run",
-		"test:coverage": "vitest run --coverage",
-		"update": "npx npm-check -uE"
+		"test:coverage": "vitest run --coverage"
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "0.4.3",
@@ -31,8 +31,8 @@
 	"devDependencies": {
 		"@commitlint/cli": "17.4.2",
 		"@commitlint/config-conventional": "17.4.2",
+		"@vitest/coverage-c8": "^0.28.4",
 		"@zeebats/eslint-config": "1.3.1",
-		"c8": "7.12.0",
 		"case-police": "0.5.10",
 		"eslint-plugin-jsonc": "2.6.0",
 		"netlify-cli": "12.10.0",

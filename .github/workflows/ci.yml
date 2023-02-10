@@ -11,27 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: "lts/*"
+          node-version-file: ".nvmrc"
           cache: "npm"
-
-      - name: NPM install
-        run: npm install
-
-      - name: Run Vitest
-        run: "npm run test"
-
-      - name: Run ESLint
-        run: npm run eslint
-
-      - name: Run TypeScript checker
-        run: "npm run check:types"
-
-      - name: Run CasePolice
-        run: "npm run check:case:fix"
-
-      # - name: Run tests
-      #   run: npm run test
+      - run: "npm install"
+      - run: "npm run eslint"
+      - run: "npm run check:types"
+      - run: "npm run check:case"
+      - run: "npm run test"

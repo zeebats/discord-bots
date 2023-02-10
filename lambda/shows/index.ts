@@ -1,10 +1,11 @@
 import { Handler, schedule } from '@netlify/functions';
 
-import { getShows } from '@src/shows';
-import { useWebhook } from '@src/webhook';
-import { Providers } from '@ts/shows';
-import { escapeDST } from '@utils/dates';
-import { handleSentryError, default as Sentry } from '@utils/sentry';
+import { getShows } from '@/src/shows';
+import { useWebhook } from '@/src/webhook';
+import { escapeDST } from '@/utils/dates';
+import { handleSentryError, default as Sentry } from '@/utils/sentry';
+
+import type { Providers } from '@/types/shows';
 
 const {
 	SENTRY_DSN,
