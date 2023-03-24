@@ -6,10 +6,7 @@
 
 [dev]
   publish = "dist"
-  port = 4448
-
-[[plugins]]
-  package = "netlify-plugin-discord"
+  port = 3337
 
 [[redirects]]
   from = "/api/*"

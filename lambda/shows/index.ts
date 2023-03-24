@@ -1,4 +1,4 @@
-import { Handler, schedule } from '@netlify/functions';
+import { type Handler, schedule } from '@netlify/functions';
 
 import { getShows } from '@/src/shows';
 import { useWebhook } from '@/src/webhook';
@@ -16,7 +16,7 @@ Sentry.init({ dsn: SENTRY_DSN });
 
 Sentry.setTag('bot', 'shows');
 
-const handleUpdate = (providers: Providers): Promise<Response> => useWebhook({
+const handleUpdate = (providers: Providers) => useWebhook({
 	url: WEBHOOK_SHOWS,
 	webhook: {
 		embeds: providers.map(({
@@ -38,13 +38,13 @@ const handleUpdate = (providers: Providers): Promise<Response> => useWebhook({
 	},
 });
 
-const handleEmpty = (): Promise<Response> => useWebhook({
+const handleEmpty = () => useWebhook({
 	url: WEBHOOK_SHOWS,
 	webhook: { embeds: [{ title: 'No new shows today!' }] },
 });
 
 // eslint-disable-next-line max-statements
-export const handler: Handler = schedule('0 16-17 * * *', async (): Promise<{ statusCode: number; }> => {
+export const handler: Handler = schedule('0 16-17 * * *', async () => {
 	try {
 		if (escapeDST()) {
 			return { statusCode: 200 };
@@ -57,10 +57,11 @@ export const handler: Handler = schedule('0 16-17 * * *', async (): Promise<{ st
 		}
 
 		const {
-			ok, ...response
+			statusCode,
+			...response
 		} = await handleUpdate(items);
 
-		if (!ok) {
+		if (statusCode !== 204) {
 			throw response;
 		}
 

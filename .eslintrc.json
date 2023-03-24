@@ -1,4 +1,7 @@
 {
 	"extends": ["@zeebats/eslint-config/typescript"],
-	"ignorePatterns": ["coverage/**/*"]
+	"ignorePatterns": [
+		"coverage/**/*",
+		"types/supabase.ts"
+	]
 }

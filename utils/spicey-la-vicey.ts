@@ -1,7 +1,7 @@
 import { getUnixTime, parse, startOfDay } from 'date-fns';
 import { decode } from 'html-entities';
 
-export const getTitle = (string: string): string => {
+export const getTitle = (string: string) => {
 	const match = (/<.*?class=".*?sc-c-metadata__primary.*?>(.*?)<\/.*>/g).exec(string);
 
 	if (match === null) {
@@ -15,7 +15,7 @@ export const getTitle = (string: string): string => {
 	return decode(value);
 };
 
-export const getDescription = (string: string): string => {
+export const getDescription = (string: string) => {
 	const match = (/<.*?class=".*?sc-c-metadata__synopsis.*?>(.*?)<\/.*>/g).exec(string);
 
 	if (match === null) {
@@ -29,7 +29,7 @@ export const getDescription = (string: string): string => {
 	return decode(value);
 };
 
-export const getLink = (string: string): string => {
+export const getLink = (string: string) => {
 	const match = (/<.*?class=".*?sc-c-playable-list-card__link.*? href="(.*?)"/g).exec(string);
 
 	if (match === null) {
@@ -43,7 +43,7 @@ export const getLink = (string: string): string => {
 	return decode(`https://www.bbc.co.uk${value}`);
 };
 
-export const getTimestamp = (string: string): number => {
+export const getTimestamp = (string: string) => {
 	const match = (/<.*?class=".*?sc-c-metadata__release-date.*?>(.*?)<\/.*>/g).exec(string);
 
 	if (match === null) {

@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch';
+import phin from 'phin';
 
 import {
 	getDescription,
@@ -7,16 +7,21 @@ import {
 	getTitle,
 } from '@/utils/spicey-la-vicey';
 
-export type Mix = {
+export type Episode = {
     description: string;
     link: string;
     timestamp: number;
     title: string;
 }
 
-export type Mixes = Mix[];
+export type Episodes = Episode[];
 
-export const formatMixes = (response: string): Mixes => {
+export type Content = {
+	mix: Episode;
+	show: Episode;
+}
+
+export const formatResponse = (response: string) => {
 	const cleaned = response.replace(/^\s+|\s+$/g, '').replace(/(\r\n|\n|\r)/gm, '');
 
 	const cards = cleaned.match(/<article.*?class=".*?sc-c-playable-list-card.*?>(.*?)<\/article>/g) || [];
@@ -29,17 +34,33 @@ export const formatMixes = (response: string): Mixes => {
 	}));
 };
 
-export const getMixes = async (): Promise<Mixes> => {
-	const request = await fetch('https://www.bbc.co.uk/sounds/brand/b09c12lj');
-	const response = await request.text();
+export const getShows = async () => {
+	const { body: response } = await phin({
+		parse: 'string',
+		url: 'https://www.bbc.co.uk/sounds/brand/b09c12lj',
+	});
 
-	return formatMixes(response);
+	return formatResponse(response);
 };
 
-export const getNewestMix = async (): Promise<Mix> => {
+export const getMixes = async () => {
+	const { body: response } = await phin({
+		parse: 'string',
+		url: 'https://www.bbc.co.uk/sounds/brand/m0003l3c',
+	});
+
+	return formatResponse(response);
+};
+
+export const getNewestContent = async () => {
+	const shows = await getShows();
 	const mixes = await getMixes();
 
-	const [newestMix] = mixes.sort((a, b): number => b.timestamp - a.timestamp);
+	const [show] = shows.sort((a, b) => b.timestamp - a.timestamp);
+	const [mix] = mixes.sort((a, b) => b.timestamp - a.timestamp);
 
-	return newestMix;
+	return {
+		mix,
+		show,
+	};
 };

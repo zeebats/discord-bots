@@ -1,15 +1,14 @@
 import { getLink, getThumbnail, getTitle } from '@/utils/justwatch';
 
-import type { Shows } from '@/types/shows';
 import type { HTMLElement } from 'node-html-parser';
 
-export const getSeason = (item: HTMLElement | null): string => {
+export const getSeason = (item: HTMLElement | null) => {
 	const element = item?.querySelector('.title-poster__badge');
 
 	return `Season ${element?.innerText?.replace(/season /i, '')?.padStart(2, '0')}` || '';
 };
 
-export const getEpisode = (item: HTMLElement | null): string => {
+export const getEpisode = (item: HTMLElement | null) => {
 	const element = item?.querySelector('.title-poster__badge__new');
 
 	const unmodified = element?.innerText?.toLowerCase()?.split(' ');
@@ -24,7 +23,7 @@ export const getEpisode = (item: HTMLElement | null): string => {
 	return modified?.join(' ') || '';
 };
 
-export const getShowItems = (element: HTMLElement | null): Shows => {
+export const getShowItems = (element: HTMLElement | null) => {
 	const items = element?.querySelectorAll('.horizontal-title-list__item') || [];
 
 	return items.map(item => ({
@@ -33,5 +32,5 @@ export const getShowItems = (element: HTMLElement | null): Shows => {
 		season: getSeason(item),
 		thumbnail: getThumbnail(item),
 		title: getTitle(item),
-	})).sort((a, b): number => `${a.title} ${a.season}`.localeCompare(`${b.title} ${b.season}`)) || [];
+	})).sort((a, b) => `${a.title} ${a.season}`.localeCompare(`${b.title} ${b.season}`)) || [];
 };

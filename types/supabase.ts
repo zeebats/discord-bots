@@ -9,7 +9,7 @@ export type JSON =
 export interface Database {
   public: {
     Tables: {
-      'spicey-la-vicey': {
+      "spicey-la-vicey": {
         Row: {
           id: number
           timestamp: number | null
@@ -39,6 +39,8 @@ export interface Database {
     Enums: {
       [_ in never]: never
     }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
 }
-

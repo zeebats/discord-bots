@@ -1,4 +1,4 @@
-import fetch from 'cross-fetch';
+import phin from 'phin';
 
 import { selectedProviders } from '@/enums/providers';
 import {
@@ -6,13 +6,13 @@ import {
 	getProviderLink,
 	getProviderName,
 	getToday,
-	JustWatchResponse,
+	type JustWatchResponse,
 } from '@/utils/justwatch';
 import { getShowItems } from '@/utils/shows';
 
-import type { Provider, Providers } from '@/types/shows';
+import type { Provider } from '@/types/shows';
 
-export const formatShows = (responses: JustWatchResponse[]): Providers => {
+export const formatShows = (responses: JustWatchResponse[]) => {
 	const today = getToday(responses);
 
 	return today.map(({
@@ -33,13 +33,17 @@ export const formatShows = (responses: JustWatchResponse[]): Providers => {
 	})) || [];
 };
 
-export const getShows = async (): Promise<Providers> => {
+export const getShows = async () => {
 	const collected = await Promise.all(
-		Object.values(selectedProviders).map(async ({ slug }): Promise<JustWatchResponse> => {
+		Object.values(selectedProviders).map(async ({ slug }) => {
 			const url = getProviderLink(slug, 'tv-shows');
 
-			const request = await fetch(url);
-			const response = await request.text();
+			const request = await phin({
+				parse: 'string',
+				url,
+			});
+
+			const response = request.body;
 
 			return {
 				response,
