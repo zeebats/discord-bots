@@ -17,8 +17,8 @@
 	"dependencies": {
 		"@js-temporal/polyfill": "0.4.3",
 		"@netlify/functions": "1.4.0",
-		"@sentry/node": "7.46.0",
-		"@supabase/supabase-js": "2.13.1",
+		"@sentry/node": "7.47.0",
+		"@supabase/supabase-js": "2.15.0",
 		"@types/node": "18.15.11",
 		"date-fns": "2.29.3",
 		"discord-api-types": "0.37.37",
@@ -34,7 +34,7 @@
 		"case-police": "0.5.14",
 		"netlify-cli": "13.2.2",
 		"simple-git-hooks": "2.8.1",
-		"typescript": "5.0.3",
+		"typescript": "5.0.4",
 		"vitest": "0.29.8"
 	}
 }
