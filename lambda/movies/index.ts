@@ -2,7 +2,7 @@ import { type Handler, schedule } from '@netlify/functions';
 
 import { getMovies } from '@/src/movies';
 import { useWebhook } from '@/src/webhook';
-import { escapeDST } from '@/utils/dates';
+import { escapeSummerTime } from '@/utils/dates';
 import { handleSentryError, default as Sentry } from '@/utils/sentry';
 
 import type { Providers } from '@/types/movies';
@@ -47,7 +47,7 @@ const handleEmpty = () => useWebhook({
 // eslint-disable-next-line max-statements
 export const handler: Handler = schedule('0 16-17 * * *', async () => {
 	try {
-		if (escapeDST()) {
+		if (escapeSummerTime()) {
 			return { statusCode: 200 };
 		}
 
