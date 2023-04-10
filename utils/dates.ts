@@ -1,4 +1,4 @@
-/* eslint-disable sort-keys, no-tabs, no-console */
+/* eslint-disable sort-keys */
 import { Temporal } from '@js-temporal/polyfill';
 
 export const isSummerTime = (date = Temporal.Now.zonedDateTimeISO('UTC')) => {

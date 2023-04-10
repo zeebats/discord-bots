@@ -1,10 +1,12 @@
+import { Temporal } from '@js-temporal/polyfill';
 import { type Handler, schedule } from '@netlify/functions';
 import * as Sentry from '@sentry/node';
 import { createClient } from '@supabase/supabase-js';
-import { format, fromUnixTime, getHours } from 'date-fns';
+import { format, fromUnixTime } from 'date-fns';
 
 import { getNewestContent } from '@/src/spicey-la-vicey';
 import { useWebhook } from '@/src/webhook';
+import { isSummerTime } from '@/utils/dates';
 import { handleSentryError } from '@/utils/sentry';
 
 import type { Database } from '@/types/supabase';
@@ -53,7 +55,7 @@ const handleBefore = async () => {
 };
 
 // eslint-disable-next-line max-lines-per-function, max-statements, complexity
-const handleUpdate = async (lastCheck: boolean) => {
+const handleUpdate = async (lastInvocation: boolean) => {
 	const newContent = await getNewestContent();
 
 	const { data } = await $supabase
@@ -73,14 +75,15 @@ const handleUpdate = async (lastCheck: boolean) => {
 	const updateShow = show.timestamp && show.timestamp < newContent.show.timestamp && show.title !== newContent.show.title;
 	const updateMix = mix.timestamp && mix.timestamp < newContent.mix.timestamp && mix.title !== newContent.mix.title;
 
-	// If we're at the twelfth hour (the last time the function checks each week)
-	// and we've not found a new show or a new mix, escape true to enter handleFinally
-	if (lastCheck && !updateShow && !updateMix) {
+	// If we're at the last time the function checks each week
+	// and we've not found a new show AND a new mix, escape true to enter handleFinally
+	if (lastInvocation && !updateShow && !updateMix) {
 		return true;
 	}
 
-	// If we're not at the twelfth hour and both show or mix aren't new, escape false to avoid handleFinally
-	if (!lastCheck && !(updateShow && updateMix)) {
+	// If we're not at the last invocation and both show or mix aren't new, escape false to avoid handleFinally
+	// This is for when the update has already been sent!
+	if (!lastInvocation && !(updateShow && updateMix)) {
 		return false;
 	}
 
@@ -202,18 +205,21 @@ const handleFinally = async () => {
 	});
 };
 
-// eslint-disable-next-line max-statements, complexity
-export const handler: Handler = schedule('0 0-12 * * 1', async () => {
+// eslint-disable-next-line max-statements
+export const handler: Handler = schedule('0 22-23,0-11 * * 1', async () => {
 	try {
-		const currentHour = getHours(Date.now());
+		const { hour } = Temporal.Now.zonedDateTimeISO('UTC');
 
-		if (currentHour === 0) {
+		const firstInvocation = isSummerTime() ? 22 : 23;
+		const lastInvocation = isSummerTime() ? 10 : 11;
+
+		if (hour === firstInvocation) {
 			await handleBefore();
 		}
 
-		const escape = await handleUpdate(currentHour === 12);
+		const escape = await handleUpdate(hour >= lastInvocation);
 
-		if (escape && currentHour === 12) {
+		if (escape && hour >= lastInvocation) {
 			await handleFinally();
 		}
 
