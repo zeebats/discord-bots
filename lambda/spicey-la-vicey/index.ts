@@ -206,11 +206,11 @@ const handleFinally = async () => {
 };
 
 // eslint-disable-next-line max-statements
-export const handler: Handler = schedule('0 22-23,0-11 * * 1', async () => {
+export const handler: Handler = schedule('0 1-11 * * 1', async () => {
 	try {
 		const { hour } = Temporal.Now.zonedDateTimeISO('UTC');
 
-		const firstInvocation = isSummerTime() ? 22 : 23;
+		const firstInvocation = isSummerTime() ? 1 : 2;
 		const lastInvocation = isSummerTime() ? 10 : 11;
 
 		if (hour === firstInvocation) {
