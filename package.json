@@ -17,11 +17,11 @@
 	"dependencies": {
 		"@js-temporal/polyfill": "0.4.3",
 		"@netlify/functions": "1.4.0",
-		"@sentry/node": "7.48.0",
-		"@supabase/supabase-js": "2.20.0",
-		"@types/node": "18.15.11",
+		"@sentry/node": "7.49.0",
+		"@supabase/supabase-js": "2.21.0",
+		"@types/node": "18.15.13",
 		"date-fns": "2.29.3",
-		"discord-api-types": "0.37.38",
+		"discord-api-types": "0.37.39",
 		"html-entities": "2.3.3",
 		"node-html-parser": "6.1.5",
 		"phin": "3.7.0"
