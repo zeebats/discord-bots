@@ -2,15 +2,24 @@ import { getUnixTime, parse, startOfDay } from 'date-fns';
 import { decode } from 'html-entities';
 
 export const getTitle = (string: string) => {
-	const match = (/<.*?class=".*?sc-c-metadata__primary.*?>(.*?)<\/.*>/g).exec(string);
+	const primary = (/<.*?class=".*?sc-c-metadata__primary.*?>(.*?)<\/.*>/g).exec(string);
+	const secondary = (/<.*?class=".*?sc-c-metadata__secondary.*?>(.*?)<\/.*>/g).exec(string);
 
-	if (match === null) {
+	if (secondary !== null) {
+		const [
+			, value,
+		] = secondary;
+
+		return decode(value);
+	}
+
+	if (primary === null) {
 		return '';
 	}
 
 	const [
 		, value,
-	] = match;
+	] = primary;
 
 	return decode(value);
 };

@@ -1,209 +1,18 @@
 import { Temporal } from '@js-temporal/polyfill';
 import { type Handler, schedule } from '@netlify/functions';
 import * as Sentry from '@sentry/node';
-import { createClient } from '@supabase/supabase-js';
-import { format, fromUnixTime } from 'date-fns';
 
-import { getNewestContent } from '@/src/spicey-la-vicey';
-import { useWebhook } from '@/src/webhook';
+import { handleBefore } from '@/lambda/spicey-la-vicey/before';
+import { handleFinally } from '@/lambda/spicey-la-vicey/finally';
+import { handleUpdate } from '@/lambda/spicey-la-vicey/update';
 import { isSummerTime } from '@/utils/dates';
 import { handleSentryError } from '@/utils/sentry';
 
-import type { Database } from '@/types/supabase';
-
-const {
-	SENTRY_DSN,
-	SUPABASE_API_KEY = '',
-	SUPABASE_URL = '',
-	WEBHOOK_SPICEY_LA_VICEY,
-} = process.env;
+const { SENTRY_DSN } = process.env;
 
 Sentry.init({ dsn: SENTRY_DSN });
 
 Sentry.setTag('bot', 'spicey-la-vicey');
-
-const $supabase = createClient<Database>(SUPABASE_URL, SUPABASE_API_KEY);
-
-const handleBefore = async () => {
-	const { data } = await $supabase
-		.from('spicey-la-vicey')
-		.select()
-		.limit(2);
-
-	if (!data || data.length < 2) {
-		throw new Error('[handleBefore] Data is incorrect, please check');
-	}
-
-	const [
-		show,
-		mix,
-	] = data;
-
-	if (!show.update) {
-		$supabase
-			.from('spicey-la-vicey')
-			.update({ update: true })
-			.eq('id', 1);
-	}
-
-	if (!mix.update) {
-		$supabase
-			.from('spicey-la-vicey')
-			.update({ update: true })
-			.eq('id', 2);
-	}
-};
-
-// eslint-disable-next-line max-lines-per-function, max-statements, complexity
-const handleUpdate = async (lastInvocation: boolean) => {
-	const newContent = await getNewestContent();
-
-	const { data } = await $supabase
-		.from('spicey-la-vicey')
-		.select()
-		.limit(2);
-
-	if (!data || data.length < 2) {
-		throw new Error('[handleBefore] Data is incorrect, please check');
-	}
-
-	const [
-		show,
-		mix,
-	] = data;
-
-	const updateShow = show.timestamp && show.timestamp < newContent.show.timestamp && show.title !== newContent.show.title;
-	const updateMix = mix.timestamp && mix.timestamp < newContent.mix.timestamp && mix.title !== newContent.mix.title;
-
-	// If we're at the last time the function checks each week
-	// and we've not found a new show AND a new mix, escape true to enter handleFinally
-	if (lastInvocation && !updateShow && !updateMix) {
-		return true;
-	}
-
-	// If we're not at the last invocation and both show or mix aren't new, escape false to avoid handleFinally
-	// This is for when the update has already been sent!
-	if (!lastInvocation && !(updateShow && updateMix)) {
-		return false;
-	}
-
-	if (updateShow) {
-		await $supabase
-			.from('spicey-la-vicey')
-			.update({
-				timestamp: newContent.show.timestamp,
-				title: newContent.show.title,
-				update: false,
-			})
-			.eq('id', 1);
-	}
-
-	if (updateMix) {
-		await $supabase
-			.from('spicey-la-vicey')
-			.update({
-				timestamp: newContent.mix.timestamp,
-				title: newContent.mix.title,
-				update: false,
-			})
-			.eq('id', 2);
-	}
-
-	await useWebhook({
-		url: WEBHOOK_SPICEY_LA_VICEY,
-		webhook: {
-			embeds: [
-				{
-					color: 13_189_196,
-					description: '🌶🌶🌶\n\nThe hottest D&B, exclusives and big guests.',
-					fields: [
-						{
-							name: '🗄',
-							value: '**[All available shows](https://www.bbc.co.uk/programmes/b09c12lj/episodes/player)**',
-						},
-						{
-							name: '🗄',
-							value: '**[All available mixes](https://www.bbc.co.uk/programmes/m0003l3c/episodes/player)**',
-						},
-					],
-
-					thumbnail: { url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700' },
-					title: 'Radio 1\'s Drum & Bass',
-				},
-				...(updateShow ? [
-					{
-						color: 13_189_196,
-						description: newContent.show.description,
-						fields: [
-							{
-								name: '▶️',
-								value: `**[Listen now](${newContent.show.link})**`,
-							},
-						],
-						footer: { text: `Posted on: ${format(fromUnixTime(newContent.show.timestamp), 'dd MMMM')}` },
-						title: `Show: ${newContent.show.title}`,
-						url: newContent.show.link,
-					},
-				] : [
-					{
-						color: 4_944_171,
-						description: '🥦\n\nFinished checking for new show content. Nothing new found, meh!',
-						title: 'Show: No new content found',
-					},
-				]),
-				...(updateMix ? [
-					{
-						color: 13_189_196,
-						description: newContent.mix.description,
-						fields: [
-							{
-								name: '▶️',
-								value: `**[Listen now](${newContent.mix.link})**`,
-							},
-						],
-						footer: { text: `Posted on: ${format(fromUnixTime(newContent.mix.timestamp), 'dd MMMM')}` },
-						title: `Mix: ${newContent.mix.title}`,
-						url: newContent.mix.link,
-					},
-				] : [
-					{
-						color: 4_944_171,
-						description: '🥦\n\nFinished checking for new mix content. Nothing new found, meh!',
-						title: 'Mix: No new content found',
-					},
-				]),
-			],
-		},
-	});
-
-	// Escape false after shooting a webhook to avoid handleFinally webhook
-	return false;
-};
-
-const handleFinally = async () => {
-	await $supabase
-		.from('spicey-la-vicey')
-		.update({ update: false })
-		.eq('id', 1);
-
-	await $supabase
-		.from('spicey-la-vicey')
-		.update({ update: false })
-		.eq('id', 2);
-
-	return useWebhook({
-		url: WEBHOOK_SPICEY_LA_VICEY,
-		webhook: {
-			embeds: [
-				{
-					color: 4_944_171,
-					description: '🥦🥦🥦\n\nFinished checking new content. Nothing new found, meh!',
-					title: 'Radio 1\'s Drum & Bass',
-				},
-			],
-		},
-	});
-};
 
 // eslint-disable-next-line max-statements
 export const handler: Handler = schedule('0 1-11 * * 1', async () => {
@@ -212,6 +21,12 @@ export const handler: Handler = schedule('0 1-11 * * 1', async () => {
 
 		const firstInvocation = isSummerTime() ? 1 : 2;
 		const lastInvocation = isSummerTime() ? 10 : 11;
+
+		// If function fires before the first allowed invocation, return
+		// During winterTime, the function fires at 01:00 UTC / 02:00 Amsterdam but we want it to start at 03:00 minimum
+		if (hour < firstInvocation) {
+			return { statusCode: 200 };
+		}
 
 		if (hour === firstInvocation) {
 			await handleBefore();
