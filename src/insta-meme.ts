@@ -10,6 +10,11 @@ const formatUrl = (url: string) => {
 
 const getVideoInfo = async (url: string) => {
 	const response = await fetch(url);
+
+	if (!response.ok) {
+		throw new Error('Instagram response was not okay');
+	}
+
 	const json = await response.json();
 
 	const videoUrl = new URL(json.graphql.shortcode_media.video_url);
