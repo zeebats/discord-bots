@@ -1,3 +1,5 @@
+import UserAgent from 'user-agents';
+
 const formatUrl = (url: string) => {
 	const instagramUrl = new URL(url);
 	const instagramParameters = new URLSearchParams({
@@ -9,7 +11,8 @@ const formatUrl = (url: string) => {
 };
 
 const getVideoInfo = async (url: string) => {
-	const response = await fetch(url);
+	const userAgent = new UserAgent();
+	const response = await fetch(url, { headers: { 'User-Agent': userAgent.toString() } });
 
 	if (!response.ok) {
 		throw new Error('Instagram response was not okay');
@@ -27,8 +30,9 @@ const getVideoInfo = async (url: string) => {
 };
 
 export const prepareFormData = async (url: string) => {
+	const userAgent = new UserAgent();
 	const videoInfo = await getVideoInfo(formatUrl(url));
-	const file = await fetch(videoInfo.url);
+	const file = await fetch(videoInfo.url, { headers: { 'User-Agent': userAgent.toString() } });
 	const blob = await file.blob();
 
 	const formData = new FormData();
