@@ -1,5 +1,7 @@
 /* eslint-disable max-statements */
 
+import UserAgent from 'user-agents';
+
 import { prepareFormData } from '@/src/insta-meme';
 import Sentry, { handleSentryError } from '@/utils/sentry';
 
@@ -26,9 +28,11 @@ export const handler: Handler = async ({ queryStringParameters }: HandlerEvent) 
 		}
 
 		const formData = await prepareFormData(url);
+		const userAgent = new UserAgent();
 
 		await fetch(WEBHOOK_INSTA_MEME as string, {
 			body: formData,
+			headers: { 'User-Agent': userAgent.toString() },
 			method: 'POST',
 		});
 
