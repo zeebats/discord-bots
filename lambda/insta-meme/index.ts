@@ -28,7 +28,7 @@ export const handler: Handler = async ({ queryStringParameters }: HandlerEvent) 
 		}
 
 		const formData = await prepareFormData(url);
-		const userAgent = new UserAgent();
+		const userAgent = new UserAgent({ deviceCategory: 'mobile' });
 
 		await fetch(WEBHOOK_INSTA_MEME as string, {
 			body: formData,
