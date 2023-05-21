@@ -15,11 +15,11 @@
 		"test:coverage": "vitest run --coverage"
 	},
 	"dependencies": {
-		"@js-temporal/polyfill": "0.4.3",
+		"@js-temporal/polyfill": "0.4.4",
 		"@netlify/functions": "1.6.0",
-		"@sentry/node": "7.51.2",
-		"@supabase/supabase-js": "2.21.0",
-		"@types/node": "18.16.9",
+		"@sentry/node": "7.52.1",
+		"@supabase/supabase-js": "2.22.0",
+		"@types/node": "18.16.13",
 		"date-fns": "2.30.0",
 		"discord-api-types": "0.37.42",
 		"html-entities": "2.3.3",
@@ -32,9 +32,9 @@
 		"@vitest/coverage-c8": "^0.31.0",
 		"@zeebats/eslint-config": "1.3.1",
 		"case-police": "0.6.1",
-		"netlify-cli": "15.0.2",
+		"netlify-cli": "15.1.1",
 		"simple-git-hooks": "2.8.1",
 		"typescript": "5.0.4",
-		"vitest": "0.31.0"
+		"vitest": "0.31.1"
 	}
 }
