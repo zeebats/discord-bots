@@ -1,4 +1,5 @@
 import { APIEmbedField } from 'discord-api-types/v10';
+import { parse } from 'node-html-parser';
 
 import {
 	EntitiesType,
@@ -30,7 +31,23 @@ const getEntities = (json: OdesliResponse) => {
 	return entities;
 };
 
-const getInfo = (json: OdesliResponse, entities: EntitiesType<Platform>) => {
+const getGenres = (response: string) => {
+	const body = parse(response);
+	const jsonData = body.querySelector('#serialized-server-data')?.textContent;
+
+	if (!jsonData) {
+		return '';
+	}
+
+	const parsed = JSON.parse(jsonData);
+
+	const genres: string[] = parsed?.[0]?.data?.seoData?.ogSongs?.[0]?.attributes?.genreNames || [];
+
+	return genres.filter((genre: string) => !['Muziek'].includes(genre)).join(', ');
+};
+
+// eslint-disable-next-line max-statements
+const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) => {
 	const firstEntity = entities.entries().next().value[1] as EntityType;
 	const entityKey = firstEntity?.entityUniqueId ?? '';
 
@@ -40,23 +57,41 @@ const getInfo = (json: OdesliResponse, entities: EntitiesType<Platform>) => {
 		title,
 	} = json.entitiesByUniqueId[entityKey];
 
-	const platformLinks: APIEmbedField[] = [];
+	const urlAppleMusic = entities.get(Platform.AppleMusic)?.url;
 
-	for (const platform of Object.values(Platform)) {
-		const link = entities.get(platform)?.url;
+	let requestAppleMusic: Response | null = null;
+	let responseAppleMusic = '';
+	let genres = '';
 
-		if (link) {
-			platformLinks.push({
-				inline: true,
-				name: platformMap[platform].name,
-				value: `${platformMap[platform].emoji} [Link](${link})`,
-			});
-		}
+	if (urlAppleMusic) {
+		requestAppleMusic = await fetch(urlAppleMusic, { redirect: 'follow' });
+		responseAppleMusic = await requestAppleMusic.text();
+
+		genres = getGenres(responseAppleMusic);
 	}
 
 	return {
 		artistName,
-		links: platformLinks,
+		genres,
+		links: Object.values(Platform).map((platform): APIEmbedField => {
+			let link = entities.get(platform)?.url;
+
+			if (platform === Platform.AppleMusic && requestAppleMusic) {
+				link = requestAppleMusic.url;
+			}
+
+			const field = {
+				inline: true,
+				name: platformMap[platform].name,
+				value: `${platformMap[platform].emoji} No link found`,
+			};
+
+			if (link) {
+				field.value = `${platformMap[platform].emoji} [Link](${link})`;
+			}
+
+			return field;
+		}),
 		pageUrl: json.pageUrl,
 		thumbnail: thumbnailUrl ?? '',
 		title,
@@ -64,10 +99,12 @@ const getInfo = (json: OdesliResponse, entities: EntitiesType<Platform>) => {
 };
 
 export const getData = async (url: string) => {
-	const reponse = await fetch(`https://api.song.link/v1-alpha.1/links?${new URLSearchParams({
-		url,
-		userCountry: 'NL',
-	})}`);
+	const fetchURL = new URL('https://api.song.link/v1-alpha.1/links');
+
+	fetchURL.searchParams.append('url', url);
+	fetchURL.searchParams.append('userCountry', 'NL');
+
+	const reponse = await fetch(fetchURL);
 	const json = await reponse.json();
 	const entities = getEntities(json);
 

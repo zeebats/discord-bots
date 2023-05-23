@@ -20,7 +20,10 @@ export const handler: Handler = async ({ queryStringParameters }: HandlerEvent) 
 			throw new Error('No URL was given');
 		}
 
-		const { url } = queryStringParameters;
+		const {
+			requester,
+			url,
+		} = queryStringParameters;
 
 		if (!url) {
 			throw new Error('No URL was given');
@@ -42,6 +45,8 @@ export const handler: Handler = async ({ queryStringParameters }: HandlerEvent) 
 						thumbnail: { url: json.thumbnail },
 						title: `${json.artistName} - ${json.title}`,
 						url: json.pageUrl,
+						...(json.genres ? { description: `**Genres**\n${json.genres}` } : {}),
+						...(requester ? { footer: { text: `Requested by: ${requester}` } } : {}),
 					},
 				],
 			},
