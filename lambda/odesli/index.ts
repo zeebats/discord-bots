@@ -2,6 +2,7 @@
 
 import { getData } from '@/src/odesli';
 import { useWebhook } from '@/src/webhook';
+import { produceDecimalColor } from '@/utils/color';
 import Sentry, { handleSentryError } from '@/utils/sentry';
 
 import type { Handler, HandlerEvent } from '@netlify/functions';
@@ -40,7 +41,7 @@ export const handler: Handler = async ({ queryStringParameters }: HandlerEvent) 
 			webhook: {
 				embeds: [
 					{
-						color: 16_777_215,
+						color: produceDecimalColor('#fff'),
 						fields: [...json.links],
 						thumbnail: { url: json.thumbnail },
 						title: `${json.artistName} - ${json.title}`,

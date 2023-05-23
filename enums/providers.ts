@@ -1,31 +1,33 @@
+import { produceDecimalColor } from '@/utils/color';
+
 export const selectedProviders: { [key: string]: { color: number, name: string, slug: string } } = {
 	amp: {
-		color: 5_023_452,
+		color: produceDecimalColor('#4CA6DC'),
 		name: 'Amazon Prime Video',
 		slug: 'amazon-prime-video',
 	},
 	atp: {
-		color: 1,
+		color: produceDecimalColor('#000000'),
 		name: 'Apple TV+',
 		slug: 'apple-tv-plus',
 	},
 	dnp: {
-		color: 3_240_685,
+		color: produceDecimalColor('#3172ED'),
 		name: 'Disney+',
 		slug: 'disney-plus',
 	},
 	hbm: {
-		color: 9_322_718,
+		color: produceDecimalColor('#8E40DE'),
 		name: 'HBO Max',
 		slug: 'hbo-max',
 	},
 	hlu: {
-		color: 6_601_086,
+		color: produceDecimalColor('#64B97E'),
 		name: 'Hulu',
 		slug: 'hulu',
 	},
 	nfx: {
-		color: 13_774_631,
+		color: produceDecimalColor('#D22F27'),
 		name: 'Netflix',
 		slug: 'netflix',
 	},

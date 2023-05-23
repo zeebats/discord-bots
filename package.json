@@ -20,6 +20,7 @@
 		"@sentry/node": "7.50.0",
 		"@supabase/supabase-js": "2.21.0",
 		"@types/node": "18.16.3",
+		"colord": "2.9.3",
 		"date-fns": "2.30.0",
 		"discord-api-types": "0.37.41",
 		"html-entities": "2.3.3",

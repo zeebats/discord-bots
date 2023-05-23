@@ -3,6 +3,7 @@ import { format, fromUnixTime } from 'date-fns';
 import { $supabase } from '@/lambda/spicey-la-vicey/supabase';
 import { getNewestContent } from '@/src/spicey-la-vicey';
 import { useWebhook } from '@/src/webhook';
+import { produceDecimalColor } from '@/utils/color';
 
 const { WEBHOOK_SPICEY_LA_VICEY } = process.env;
 
@@ -65,7 +66,7 @@ export const handleUpdate = async (lastInvocation: boolean) => {
 		webhook: {
 			embeds: [
 				{
-					color: 13_189_196,
+					color: produceDecimalColor('#C9404C'),
 					description: '🌶🌶🌶\n\nThe hottest D&B, exclusives and big guests.',
 					fields: [
 						{
@@ -83,7 +84,7 @@ export const handleUpdate = async (lastInvocation: boolean) => {
 				},
 				...(updateShow ? [
 					{
-						color: 13_189_196,
+						color: produceDecimalColor('#C9404C'),
 						description: newContent.show.description,
 						fields: [
 							{
@@ -97,14 +98,14 @@ export const handleUpdate = async (lastInvocation: boolean) => {
 					},
 				] : [
 					{
-						color: 4_944_171,
+						color: produceDecimalColor('#4B712B'),
 						description: '🥦\n\nFinished checking for new show content. Nothing new found, meh!',
 						title: 'Show: No new content found',
 					},
 				]),
 				...(updateMix ? [
 					{
-						color: 13_189_196,
+						color: produceDecimalColor('#C9404C'),
 						description: newContent.mix.description,
 						fields: [
 							{
@@ -118,7 +119,7 @@ export const handleUpdate = async (lastInvocation: boolean) => {
 					},
 				] : [
 					{
-						color: 4_944_171,
+						color: produceDecimalColor('#4B712B'),
 						description: '🥦\n\nFinished checking for new mix content. Nothing new found, meh!',
 						title: 'Mix: No new content found',
 					},

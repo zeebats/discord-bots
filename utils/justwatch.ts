@@ -2,6 +2,8 @@ import { HTMLElement, parse } from 'node-html-parser';
 
 import { selectedProviders } from '@/enums/providers';
 
+import { produceDecimalColor } from './color';
+
 export interface JustWatchResponse {
 	response: string;
 	url: string;
@@ -70,7 +72,7 @@ export const getShortcode = (element: HTMLElement | null) => {
 export const getColor = (element: HTMLElement | null) => {
 	const provider = getShortcode(element);
 
-	return selectedProviders[provider]?.color || 15_724_527;
+	return selectedProviders[provider]?.color || produceDecimalColor('#EFEFEF');
 };
 
 export const getProviderName = (element: HTMLElement | null) => {
