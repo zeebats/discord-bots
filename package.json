@@ -16,7 +16,7 @@
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "0.4.4",
-		"@netlify/functions": "1.6.0",
+		"@netlify/functions": "2.0.2",
 		"@sentry/node": "7.64.0",
 		"@supabase/supabase-js": "2.32.0",
 		"@types/node": "18.17.6",
