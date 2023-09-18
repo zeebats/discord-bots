@@ -7,12 +7,12 @@ const { WEBHOOK_SPICEY_LA_VICEY } = process.env;
 export const handleFinally = async () => {
 	await $supabase
 		.from('spicey-la-vicey')
-		.update({ update: false })
+		.update({ updatedThisWeek: true })
 		.eq('id', 1);
 
 	await $supabase
 		.from('spicey-la-vicey')
-		.update({ update: false })
+		.update({ updatedThisWeek: true })
 		.eq('id', 2);
 
 	useWebhook({
@@ -21,7 +21,7 @@ export const handleFinally = async () => {
 			embeds: [
 				{
 					color: produceDecimalColor('#4B712B'),
-					description: '🥦🥦🥦\n\nFinished checking new content. Nothing new found, meh!',
+					description: '🥦🥦🥦\n\nFinished checking for both new show & mix content. However, nothing new found this week, meh!',
 					title: 'Radio 1\'s Drum & Bass',
 				},
 			],

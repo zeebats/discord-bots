@@ -1,5 +1,5 @@
 import { Temporal } from '@js-temporal/polyfill';
-import { type Handler, schedule } from '@netlify/functions';
+import { schedule } from '@netlify/functions';
 import * as Sentry from '@sentry/node';
 
 import { handleBefore } from '@/lambda/spicey-la-vicey/before';
@@ -15,26 +15,33 @@ Sentry.init({ dsn: SENTRY_DSN });
 Sentry.setTag('bot', 'spicey-la-vicey');
 
 // eslint-disable-next-line max-statements
-export const handler: Handler = schedule('0 1-11 * * 1', async () => {
+export const handler = schedule('0 1-11 * * 1', async () => {
 	try {
 		const { hour } = Temporal.Now.zonedDateTimeISO('UTC');
 
 		const firstInvocation = isSummerTime() ? 1 : 2;
-		const lastInvocation = isSummerTime() ? 10 : 11;
+		const beforeFirstInvocation = hour < firstInvocation;
+		const isFirstInvocation = hour === firstInvocation;
 
-		// If function fires before the first allowed invocation, return
+		const lastInvocation = isSummerTime() ? 10 : 11;
+		const isLastInvocation = hour >= lastInvocation;
+
+		// If function fires before the first allowed invocation, return without doing anything else
 		// During winterTime, the function fires at 01:00 UTC / 02:00 Amsterdam but we want it to start at 03:00 minimum
-		if (hour < firstInvocation) {
+		if (beforeFirstInvocation) {
 			return { statusCode: 200 };
 		}
 
-		if (hour === firstInvocation) {
+		if (isFirstInvocation) {
 			await handleBefore();
 		}
 
-		const escape = await handleUpdate(hour >= lastInvocation);
+		const escape = await handleUpdate(
+			isFirstInvocation,
+			isLastInvocation,
+		);
 
-		if (escape && hour >= lastInvocation) {
+		if (escape && isLastInvocation) {
 			await handleFinally();
 		}
 

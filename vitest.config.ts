@@ -5,5 +5,8 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	resolve: { alias: { '@': path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), './') } },
-	test: { globals: true },
+	test: {
+		globals: true,
+		includeSource: ['**/*.ts'],
+	},
 });

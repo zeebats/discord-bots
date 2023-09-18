@@ -3,7 +3,7 @@ export type JSON =
   | number
   | boolean
   | null
-  | { [key: string]: JSON }
+  | { [key: string]: JSON | undefined }
   | JSON[]
 
 export interface Database {
@@ -14,20 +14,21 @@ export interface Database {
           id: number
           timestamp: number | null
           title: string | null
-          update: boolean | null
+          updatedThisWeek: boolean | null
         }
         Insert: {
           id?: number
           timestamp?: number | null
           title?: string | null
-          update?: boolean | null
+          updatedThisWeek?: boolean | null
         }
         Update: {
           id?: number
           timestamp?: number | null
           title?: string | null
-          update?: boolean | null
+          updatedThisWeek?: boolean | null
         }
+        Relationships: []
       }
     }
     Views: {

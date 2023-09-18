@@ -15,7 +15,8 @@
 		"target": "ESNext",
 		"types": [
 			"node",
-			"vitest/globals"
+			"vitest/globals",
+			"vitest/importMeta"
 		]
 	}
 }

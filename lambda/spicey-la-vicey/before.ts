@@ -1,31 +1,42 @@
 import { $supabase } from '@/lambda/spicey-la-vicey/supabase';
+import { useWebhook } from '@/src/webhook';
+import { produceDecimalColor } from '@/utils/color';
 
+const { WEBHOOK_SPICEY_LA_VICEY } = process.env;
+
+// eslint-disable-next-line max-lines-per-function
 export const handleBefore = async () => {
-	const { data } = await $supabase
+	await $supabase
 		.from('spicey-la-vicey')
-		.select()
-		.limit(2);
+		.update({ updatedThisWeek: false })
+		.eq('id', 1);
 
-	if (!data || data.length < 2) {
-		throw new Error('[handleBefore] Data is incorrect, please check');
-	}
+	await $supabase
+		.from('spicey-la-vicey')
+		.update({ updatedThisWeek: false })
+		.eq('id', 2);
 
-	const [
-		show,
-		mix,
-	] = data;
-
-	if (!show.update) {
-		$supabase
-			.from('spicey-la-vicey')
-			.update({ update: true })
-			.eq('id', 1);
-	}
-
-	if (!mix.update) {
-		$supabase
-			.from('spicey-la-vicey')
-			.update({ update: true })
-			.eq('id', 2);
-	}
+	await useWebhook({
+		url: WEBHOOK_SPICEY_LA_VICEY,
+		webhook: {
+			embeds: [
+				{
+					color: produceDecimalColor('#C9404C'),
+					description: '🌶🌶🌶\n\nThe hottest D&B, exclusives and big guests.',
+					fields: [
+						{
+							name: '🗄',
+							value: '**[All available shows](https://www.bbc.co.uk/programmes/b09c12lj/episodes/player)**',
+						},
+						{
+							name: '🗄',
+							value: '**[All available mixes](https://www.bbc.co.uk/programmes/m0003l3c/episodes/player)**',
+						},
+					],
+					thumbnail: { url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700' },
+					title: 'Radio 1\'s Drum & Bass',
+				},
+			],
+		},
+	});
 };
