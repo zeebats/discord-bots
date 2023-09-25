@@ -1,23 +1,20 @@
-[context.production]
-  environment = { NODE_ENV = "production" }
-
 [functions]
-  node_bundler = "esbuild"
+node_bundler = "esbuild"
 
 [dev]
-  publish = "dist"
-  port = 3337
+publish = "dist"
+port = 3337
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-  force = true
+from = "/api/*"
+to = "/.netlify/functions/:splat"
+status = 200
+force = true
 
 [[headers]]
-  for = "/*"
-  [headers.values]
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
+for = "/*"
+[headers.values]
+Referrer-Policy = "strict-origin-when-cross-origin"
+X-Content-Type-Options = "nosniff"
+X-Frame-Options = "DENY"
+X-XSS-Protection = "1; mode=block"
