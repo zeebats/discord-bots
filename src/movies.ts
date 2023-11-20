@@ -1,49 +1,40 @@
-import phin from 'phin';
+import type { Provider } from '../types/movies';
 
-import { selectedProviders } from '@/enums/providers';
+import { selectedProviders } from '../enums/providers';
 import {
+	type JustWatchResponse,
 	getColor,
 	getProviderLink,
 	getProviderName,
 	getToday,
-	type JustWatchResponse,
-} from '@/utils/justwatch';
-import { getMovieItems } from '@/utils/movies';
+} from '../utils/justwatch';
+import { getMovieItems } from '../utils/movies';
 
-import type { Provider } from '@/types/movies';
-
-export const formatMovies = (responses: JustWatchResponse[]) => {
-	const today = getToday(responses);
-
-	return today.map(({
-		element,
-		url,
-	}) : Omit<Provider, 'thumbnail'> => ({
-		color: getColor(element),
-		movies: getMovieItems(element),
-		provider: getProviderName(element),
-		url,
-	})).map(({
+export const formatMovies = (responses: JustWatchResponse[]) => getToday(responses).map(({
+	element,
+	url,
+}) : Omit<Provider, 'thumbnail'> => ({
+	color: getColor(element),
+	movies: getMovieItems(element),
+	provider: getProviderName(element),
+	url,
+}))
+	.map(({
 		movies,
 		...properties
 	}) : Provider => ({
 		...properties,
 		movies,
 		thumbnail: movies[0].thumbnail,
-	})) || [];
-};
+	}));
 
 export const getMovies = async () => {
-	const collected = await Promise.all(
+	const requested = await Promise.allSettled(
 		Object.values(selectedProviders).map(async ({ slug }) => {
 			const url = getProviderLink(slug, 'movies');
 
-			const request = await phin({
-				parse: 'string',
-				url,
-			});
-
-			const response = request.body;
+			const request = await fetch(url);
+			const response = await request.text();
 
 			return {
 				response,
@@ -52,5 +43,9 @@ export const getMovies = async () => {
 		}),
 	);
 
-	return formatMovies(collected);
+	const fulfilled = requested.filter(
+		(request): request is PromiseFulfilledResult<{ response: string; url: string }> => request.status === 'fulfilled',
+	);
+
+	return formatMovies(fulfilled.map(({ value }) => value));
 };

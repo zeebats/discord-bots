@@ -1,20 +1,17 @@
-import phin from 'phin';
-
-import { ENV_DEV } from '@/utils/netlify';
-
 import type { RESTPostAPIWebhookWithTokenJSONBody } from 'discord-api-types/v10';
+
+import { ENV_DEV } from '../utils/netlify';
 
 const { WEBHOOK_TEST } = process.env;
 
-export const useWebhook = (
-	{
-		url,
-		webhook,
-	}: {
-        url: NodeJS.ProcessEnvironment['WEBHOOK_SHOWS'],
-        webhook: RESTPostAPIWebhookWithTokenJSONBody
-    },
-) => {
+export const useWebhook = async ({
+	url,
+	webhook,
+}: {
+	url: string | undefined,
+	webhook: RESTPostAPIWebhookWithTokenJSONBody
+	// eslint-disable-next-line require-await
+}) => {
 	const {
 		content = '', embeds,
 	} = webhook;
@@ -25,17 +22,17 @@ export const useWebhook = (
 		fetchURL = WEBHOOK_TEST;
 	}
 
-	if (!fetchURL) {
+	// eslint-disable-next-line no-undefined
+	if (fetchURL === undefined) {
 		throw new Error('No fetchURL set');
 	}
 
-	return phin({
-		data: JSON.stringify({
+	return fetch(fetchURL, {
+		body: JSON.stringify({
 			content,
 			embeds,
 		}),
-		headers: { 'Content-Type': 'application/json' },
+		headers: { 'Content-Type': 'application/json' /* eslint-disable-line @typescript-eslint/naming-convention */ },
 		method: 'POST',
-		url: fetchURL,
 	});
 };

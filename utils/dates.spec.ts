@@ -16,8 +16,8 @@ describe('isSummerTime()', () => {
 		const date = Temporal.ZonedDateTime.from({
 			timeZone: 'UTC',
 			year: 2023,
-			month: 3, // eslint-disable-line sort-keys
-			day: 26, // eslint-disable-line sort-keys
+			month: 3, // eslint-disable-line perfectionist/sort-objects
+			day: 26, // eslint-disable-line perfectionist/sort-objects
 			hour: 1,
 			minute: 59,
 			second: 59,
@@ -32,8 +32,8 @@ describe('isSummerTime()', () => {
 		const date = Temporal.ZonedDateTime.from({
 			timeZone: 'UTC',
 			year: 2023,
-			month: 3, // eslint-disable-line sort-keys
-			day: 26, // eslint-disable-line sort-keys
+			month: 3, // eslint-disable-line perfectionist/sort-objects
+			day: 26, // eslint-disable-line perfectionist/sort-objects
 			hour: 2,
 			minute: 0,
 			second: 0,
@@ -48,8 +48,8 @@ describe('isSummerTime()', () => {
 		const date = Temporal.ZonedDateTime.from({
 			timeZone: 'UTC',
 			year: 2023,
-			month: 10, // eslint-disable-line sort-keys
-			day: 29, // eslint-disable-line sort-keys
+			month: 10, // eslint-disable-line perfectionist/sort-objects
+			day: 29, // eslint-disable-line perfectionist/sort-objects
 			hour: 2,
 			minute: 59,
 			second: 59,
@@ -64,8 +64,8 @@ describe('isSummerTime()', () => {
 		const date = Temporal.ZonedDateTime.from({
 			timeZone: 'UTC',
 			year: 2023,
-			month: 10, // eslint-disable-line sort-keys
-			day: 29, // eslint-disable-line sort-keys
+			month: 10, // eslint-disable-line perfectionist/sort-objects
+			day: 29, // eslint-disable-line perfectionist/sort-objects
 			hour: 3,
 			minute: 0,
 			second: 0,
@@ -90,8 +90,8 @@ describe('escapeSummerTime() during wintertime', () => {
 		const date = Temporal.ZonedDateTime.from({
 			timeZone: 'UTC',
 			year: 2023,
-			month: 3, // eslint-disable-line sort-keys
-			day: 25, // eslint-disable-line sort-keys
+			month: 3, // eslint-disable-line perfectionist/sort-objects
+			day: 25, // eslint-disable-line perfectionist/sort-objects
 			hour: 16,
 		});
 
@@ -105,8 +105,8 @@ describe('escapeSummerTime() during wintertime', () => {
 		const date = Temporal.ZonedDateTime.from({
 			timeZone: 'UTC',
 			year: 2023,
-			month: 3, // eslint-disable-line sort-keys
-			day: 25, // eslint-disable-line sort-keys
+			month: 3, // eslint-disable-line perfectionist/sort-objects
+			day: 25, // eslint-disable-line perfectionist/sort-objects
 			hour: 17,
 		});
 
@@ -130,8 +130,8 @@ describe('escapeSummerTime() during summertime', () => {
 		const date = Temporal.ZonedDateTime.from({
 			timeZone: 'UTC',
 			year: 2023,
-			month: 3, // eslint-disable-line sort-keys
-			day: 27, // eslint-disable-line sort-keys
+			month: 3, // eslint-disable-line perfectionist/sort-objects
+			day: 27, // eslint-disable-line perfectionist/sort-objects
 			hour: 16,
 		});
 
@@ -145,8 +145,8 @@ describe('escapeSummerTime() during summertime', () => {
 		const date = Temporal.ZonedDateTime.from({
 			timeZone: 'UTC',
 			year: 2023,
-			month: 3, // eslint-disable-line sort-keys
-			day: 27, // eslint-disable-line sort-keys
+			month: 3, // eslint-disable-line perfectionist/sort-objects
+			day: 27, // eslint-disable-line perfectionist/sort-objects
 			hour: 17,
 		});
 

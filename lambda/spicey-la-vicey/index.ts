@@ -1,21 +1,25 @@
-import { Temporal } from '@js-temporal/polyfill';
-import { schedule } from '@netlify/functions';
-import * as Sentry from '@sentry/node';
+import type { Config } from '@netlify/functions';
 
-import { handleBefore } from '@/lambda/spicey-la-vicey/before';
-import { handleFinally } from '@/lambda/spicey-la-vicey/finally';
-import { handleUpdate } from '@/lambda/spicey-la-vicey/update';
-import { isSummerTime } from '@/utils/dates';
-import { handleSentryError } from '@/utils/sentry';
+import { Temporal } from '@js-temporal/polyfill';
+import { createStorage } from 'unstorage';
+import netlifyBlobsDriver from 'unstorage/drivers/netlify-blobs';
+
+import { isSummerTime } from '../../utils/dates';
+import { $sentry, handleSentryError } from '../../utils/sentry';
+import { handleBefore } from './before';
+import { handleFinally } from './finally';
+import { handleUpdate } from './update';
+
+export const $blob = createStorage({ driver: netlifyBlobsDriver({ name: 'spicey-la-vicey' }) }); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
 
 const { SENTRY_DSN } = process.env;
 
-Sentry.init({ dsn: SENTRY_DSN });
+$sentry.init({ dsn: SENTRY_DSN });
 
-Sentry.setTag('bot', 'spicey-la-vicey');
+$sentry.setTag('bot', 'spicey-la-vicey');
 
-// eslint-disable-next-line max-statements
-export const handler = schedule('0 1-11 * * 1', async () => {
+// eslint-disable-next-line max-statements, consistent-return
+export default async () => {
 	try {
 		const { hour } = Temporal.Now.zonedDateTimeISO('UTC');
 
@@ -44,11 +48,9 @@ export const handler = schedule('0 1-11 * * 1', async () => {
 		if (escape && isLastInvocation) {
 			await handleFinally();
 		}
-
-		return { statusCode: 200 };
 	} catch (error: unknown) {
-		handleSentryError(Sentry, error);
-
-		return { statusCode: 500 };
+		handleSentryError($sentry, error);
 	}
-});
+};
+
+export const config: Config = { schedule: '0 1-11 * * 1' };

@@ -1,6 +1,6 @@
 import { type AnyColor, colord } from 'colord';
 
-export const produceDecimalColor = (color: AnyColor): number => {
+export const produceDecimalColor = (color: AnyColor) => {
 	let parsedColor = colord(color);
 
 	// Unfortunately Discord won't accept pure black, so we have to reassign with "off-by-one black"

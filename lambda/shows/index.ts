@@ -1,22 +1,23 @@
-import { type Handler, schedule } from '@netlify/functions';
+import type { Config } from '@netlify/functions';
 
-import { getShows } from '@/src/shows';
-import { useWebhook } from '@/src/webhook';
-import { escapeSummerTime } from '@/utils/dates';
-import { handleSentryError, default as Sentry } from '@/utils/sentry';
+import type { Providers } from '../../types/shows';
 
-import type { Providers } from '@/types/shows';
+import { getShows } from '../../src/shows';
+import { useWebhook } from '../../src/webhook';
+import { escapeSummerTime } from '../../utils/dates';
+import { $sentry, handleSentryError } from '../../utils/sentry';
 
 const {
 	SENTRY_DSN,
 	WEBHOOK_SHOWS,
 } = process.env;
 
-Sentry.init({ dsn: SENTRY_DSN });
+$sentry.init({ dsn: SENTRY_DSN });
 
-Sentry.setTag('bot', 'shows');
+$sentry.setTag('bot', 'shows');
 
-const handleUpdate = (providers: Providers) => useWebhook({
+// eslint-disable-next-line require-await
+const handleUpdate = async (providers: Providers) => useWebhook({
 	url: WEBHOOK_SHOWS,
 	webhook: {
 		embeds: providers.map(({
@@ -38,37 +39,35 @@ const handleUpdate = (providers: Providers) => useWebhook({
 	},
 });
 
-const handleEmpty = () => useWebhook({
+// eslint-disable-next-line require-await
+const handleEmpty = async () => useWebhook({
 	url: WEBHOOK_SHOWS,
 	webhook: { embeds: [{ title: 'No new shows today!' }] },
 });
 
 // eslint-disable-next-line max-statements
-export const handler: Handler = schedule('0 16-17 * * *', async () => {
+export default async () => {
 	try {
 		if (escapeSummerTime()) {
-			return { statusCode: 200 };
+			return;
 		}
 
-		const items: Providers = await getShows();
+		const items = await getShows();
 
 		if (items.length === 0) {
-			handleEmpty();
+			await handleEmpty();
+
+			return;
 		}
 
-		const {
-			statusCode,
-			...response
-		} = await handleUpdate(items);
+		const response = await handleUpdate(items);
 
-		if (statusCode !== 204) {
-			throw response;
+		if (!response.ok) {
+			throw new Error(JSON.stringify(response));
 		}
-
-		return { statusCode: 200 };
 	} catch (error: unknown) {
-		handleSentryError(Sentry, error);
-
-		return { statusCode: 500 };
+		handleSentryError($sentry, error);
 	}
-});
+};
+
+export const config: Config = { schedule: '0 16-17 * * *' };

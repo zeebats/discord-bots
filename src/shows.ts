@@ -1,49 +1,40 @@
-import phin from 'phin';
+import type { Provider } from '../types/shows';
 
-import { selectedProviders } from '@/enums/providers';
+import { selectedProviders } from '../enums/providers';
 import {
+	type JustWatchResponse,
 	getColor,
 	getProviderLink,
 	getProviderName,
 	getToday,
-	type JustWatchResponse,
-} from '@/utils/justwatch';
-import { getShowItems } from '@/utils/shows';
+} from '../utils/justwatch';
+import { getShowItems } from '../utils/shows';
 
-import type { Provider } from '@/types/shows';
-
-export const formatShows = (responses: JustWatchResponse[]) => {
-	const today = getToday(responses);
-
-	return today.map(({
-		element,
-		url,
-	}) : Omit<Provider, 'thumbnail'> => ({
-		color: getColor(element),
-		provider: getProviderName(element),
-		shows: getShowItems(element),
-		url,
-	})).map(({
+export const formatShows = (responses: JustWatchResponse[]) => getToday(responses).map(({
+	element,
+	url,
+}) : Omit<Provider, 'thumbnail'> => ({
+	color: getColor(element),
+	provider: getProviderName(element),
+	shows: getShowItems(element),
+	url,
+}))
+	.map(({
 		shows,
 		...properties
 	}) : Provider => ({
 		...properties,
 		shows,
 		thumbnail: shows[0].thumbnail,
-	})) || [];
-};
+	}));
 
 export const getShows = async () => {
-	const collected = await Promise.all(
+	const requested = await Promise.allSettled(
 		Object.values(selectedProviders).map(async ({ slug }) => {
 			const url = getProviderLink(slug, 'tv-shows');
 
-			const request = await phin({
-				parse: 'string',
-				url,
-			});
-
-			const response = request.body;
+			const request = await fetch(url);
+			const response = await request.text();
 
 			return {
 				response,
@@ -51,6 +42,11 @@ export const getShows = async () => {
 			};
 		}),
 	);
+	const fulfilled = requested.filter(
+		(request): request is PromiseFulfilledResult<{ response: string; url: string }> => request.status === 'fulfilled',
+	);
 
-	return formatShows(collected);
+	const formatted = formatShows(fulfilled.map(({ value }) => value));
+
+	return formatted;
 };

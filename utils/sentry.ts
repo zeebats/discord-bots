@@ -1,16 +1,16 @@
-import * as Sentry from '@sentry/node';
+import type * as $sentry from '@sentry/node';
 
-export type SentryClient = typeof Sentry;
+export type SentryClient = typeof $sentry; // eslint-disable-line @typescript-eslint/no-type-alias
 
-const { NETLIFY_DEV } = process.env;
+const { NETLIFY_DEV = 'false' } = process.env;
 
-export const handleSentryError = (Sentry: SentryClient, error: unknown) => {
-	if (NETLIFY_DEV) {
-		// eslint-disable-next-line no-console
-		console.dir(error);
+export const handleSentryError = (client: SentryClient, error: unknown) => {
+	if (NETLIFY_DEV === 'true') {
+		console.dir(error); // eslint-disable-line no-console
 	} else {
-		Sentry.captureException(error);
+		client.captureException(error);
 	}
 };
 
-export default Sentry;
+// eslint-disable-next-line no-duplicate-imports
+export * as $sentry from '@sentry/node';

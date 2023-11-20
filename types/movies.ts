@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-type-alias */
 import type { BaseProvider } from '@/types/justwatch';
 
 export type Movie = {
@@ -8,8 +9,8 @@ export type Movie = {
 
 export type Movies = Movie[];
 
-export interface Provider extends BaseProvider {
+export type Provider = {
     movies: Movies;
-}
+} & BaseProvider
 
 export type Providers = Provider[];

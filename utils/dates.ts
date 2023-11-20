@@ -1,14 +1,13 @@
-/* eslint-disable sort-keys */
 import { Temporal } from '@js-temporal/polyfill';
 
 export const isSummerTime = (date = Temporal.Now.zonedDateTimeISO('UTC')) => {
 	const { year } = date;
 
 	const summertimeApproximate = Temporal.PlainDateTime.from({
-		year,
-		month: 3,
 		day: 31,
 		hour: 2,
+		month: 3,
+		year,
 	});
 	const summertimeExact = summertimeApproximate.subtract({
 		days: [
@@ -23,10 +22,10 @@ export const isSummerTime = (date = Temporal.Now.zonedDateTimeISO('UTC')) => {
 	});
 
 	const wintertimeApproximate = Temporal.PlainDateTime.from({
-		year,
-		month: 10,
 		day: 31,
 		hour: 3,
+		month: 10,
+		year,
 	});
 	const wintertimeExact = wintertimeApproximate.subtract({
 		days: [

@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-type-alias */
 import type { BaseProvider } from '@/types/justwatch';
 
 export type Show = {
     episode: string;
     link: string;
-    thumbnail: string;
     season: string;
+    thumbnail: string;
     title: string;
 }
 
 export type Shows = Show[];
 
-export interface Provider extends BaseProvider {
+export type Provider = {
     shows: Shows;
-}
+} & BaseProvider
 
 export type Providers = Provider[];

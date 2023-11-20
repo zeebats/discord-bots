@@ -1,6 +1,6 @@
-import { produceDecimalColor } from '@/utils/color';
+import { produceDecimalColor } from '../utils/color';
 
-export const selectedProviders: { [key: string]: { color: number, name: string, slug: string } } = {
+export const selectedProviders = {
 	amp: {
 		color: produceDecimalColor('#4CA6DC'),
 		name: 'Amazon Prime Video',
@@ -16,20 +16,19 @@ export const selectedProviders: { [key: string]: { color: number, name: string, 
 		name: 'Disney+',
 		slug: 'disney-plus',
 	},
-	hbm: {
-		color: produceDecimalColor('#8E40DE'),
-		name: 'HBO Max',
-		slug: 'hbo-max',
-	},
 	hlu: {
 		color: produceDecimalColor('#64B97E'),
 		name: 'Hulu',
 		slug: 'hulu',
+	},
+	mxx: {
+		color: produceDecimalColor('#8E40DE'),
+		name: 'HBO Max',
+		slug: 'hbo-max',
 	},
 	nfx: {
 		color: produceDecimalColor('#D22F27'),
 		name: 'Netflix',
 		slug: 'netflix',
 	},
-};
-
+} as const;

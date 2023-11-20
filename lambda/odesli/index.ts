@@ -1,38 +1,31 @@
-/* eslint-disable max-statements */
-
 import { getData } from '@/src/odesli';
 import { useWebhook } from '@/src/webhook';
 import { produceDecimalColor } from '@/utils/color';
-import Sentry, { handleSentryError } from '@/utils/sentry';
-
-import type { Handler, HandlerEvent } from '@netlify/functions';
+import { $sentry, handleSentryError } from '@/utils/sentry';
 
 const {
 	SENTRY_DSN,
 	WEBHOOK_ODESLI,
 } = process.env;
 
-Sentry.init({ dsn: SENTRY_DSN });
-Sentry.setTag('bot', 'odesli');
+$sentry.init({ dsn: SENTRY_DSN });
+$sentry.setTag('bot', 'odesli');
 
-export const handler: Handler = async ({ queryStringParameters }: HandlerEvent) => {
+// eslint-disable-next-line max-statements
+export default async (request: Request) => {
 	try {
-		if (!queryStringParameters) {
-			throw new Error('No URL was given');
-		}
+		const parameters = new URL(request.url).searchParams;
 
-		const {
-			requester,
-			url,
-		} = queryStringParameters;
+		const url = parameters.get('url');
+		const requester = parameters.get('requester');
 
-		if (!url) {
+		if (url === null) {
 			throw new Error('No URL was given');
 		}
 
 		const json = await getData(url);
 
-		if (!json) {
+		if (json === null) {
 			throw new Error('No data was found');
 		}
 
@@ -46,17 +39,13 @@ export const handler: Handler = async ({ queryStringParameters }: HandlerEvent) 
 						thumbnail: { url: json.thumbnail },
 						title: `${json.artistName} - ${json.title}`,
 						url: json.pageUrl,
-						...(json.genres ? { description: `**Genres**\n${json.genres}` } : {}),
-						...(requester ? { footer: { text: `Requested by: ${requester}` } } : {}),
+						...(json.genres === null ? {} : { description: `**Genres**\n${json.genres}` }),
+						...(requester === null ? {} : { footer: { text: `Requested by: ${requester}` } }),
 					},
 				],
 			},
 		});
-
-		return { statusCode: 200 };
 	} catch (error) {
-		handleSentryError(Sentry, error);
-
-		return { statusCode: 500 };
+		handleSentryError($sentry, error);
 	}
 };

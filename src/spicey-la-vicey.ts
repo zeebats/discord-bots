@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-type-alias */
 import phin from 'phin';
 
 import {
@@ -22,9 +23,9 @@ export type Content = {
 }
 
 export const formatResponse = (response: string) => {
-	const cleaned = response.replace(/^\s+|\s+$/g, '').replace(/(\r\n|\n|\r)/gm, '');
+	const cleaned = response.replaceAll(/^\s+|\s+$/g, '').replaceAll(/(\r\n|\n|\r)/gm, '');
 
-	const cards = cleaned.match(/<article.*?class=".*?sc-c-playable-list-card.*?>(.*?)<\/article>/g) || [];
+	const cards = cleaned.match(/<article.*?class=".*?sc-c-playable-list-card.*?>(.*?)<\/article>/g) ?? [];
 
 	return cards.map(card => ({
 		description: getDescription(card),

@@ -1,9 +1,9 @@
 import { format, fromUnixTime } from 'date-fns';
 
-import { $supabase } from '@/lambda/spicey-la-vicey/supabase';
-import { getNewestContent } from '@/src/spicey-la-vicey';
-import { useWebhook } from '@/src/webhook';
-import { produceDecimalColor } from '@/utils/color';
+import { getNewestContent } from '../../src/spicey-la-vicey';
+import { useWebhook } from '../../src/webhook';
+import { produceDecimalColor } from '../../utils/color';
+import { $blob } from './index';
 
 const { WEBHOOK_SPICEY_LA_VICEY } = process.env;
 
@@ -11,46 +11,35 @@ const { WEBHOOK_SPICEY_LA_VICEY } = process.env;
 export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boolean) => {
 	const newContent = await getNewestContent();
 
-	const { data } = await $supabase
-		.from('spicey-la-vicey')
-		.select()
-		.order('id', { ascending: true });
+	const showTimestamp = await $blob.getItem<number>('show:timestamp') ?? 0;
+	const showTitle = await $blob.getItem<string>('show:title') ?? '';
+	const showUpdated = await $blob.getItem<boolean>('show:updated') ?? true;
 
-	if (!data || data.length < 2) {
-		throw new Error('[handleBefore] Data is incorrect, please check');
-	}
+	const mixTimestamp = await $blob.getItem<number>('mix:timestamp') ?? 0;
+	const mixTitle = await $blob.getItem<string>('mix:title') ?? '';
+	const mixUpdated = await $blob.getItem<boolean>('mix:updated') ?? true;
 
-	const [
-		show,
-		mix,
-	] = data;
-
-	const sameShowAsLastWeek = show.timestamp && show.timestamp === newContent.show.timestamp && show.title === newContent.show.title;
-	const sameMixAsLastWeek = mix.timestamp && mix.timestamp === newContent.mix.timestamp && mix.title === newContent.mix.title;
+	const sameShowAsLastWeek = showTimestamp === newContent.show.timestamp && showTitle === newContent.show.title;
+	const sameMixAsLastWeek = mixTimestamp === newContent.mix.timestamp && mixTitle === newContent.mix.title;
 
 	// If we're at the last time the function checks each week
 	// and we haven't found a new show AND a new mix, escape true to enter handleFinally
-	if (lastInvocation && sameShowAsLastWeek && !show.updatedThisWeek && sameMixAsLastWeek && !mix.updatedThisWeek) {
+	if (lastInvocation && sameShowAsLastWeek && !showUpdated && sameMixAsLastWeek && !mixUpdated) {
 		return true;
 	}
 
 	// If both show and mix have already been updated, return false to avoid handleFinally
-	if (show.updatedThisWeek && mix.updatedThisWeek) {
+	if (showUpdated && mixUpdated) {
 		return false;
 	}
 
 	const showEmbeds = [];
 	const mixEmbeds = [];
 
-	if (!sameShowAsLastWeek && !show.updatedThisWeek) {
-		await $supabase
-			.from('spicey-la-vicey')
-			.update({
-				timestamp: newContent.show.timestamp,
-				title: newContent.show.title,
-				updatedThisWeek: true,
-			})
-			.eq('id', 1);
+	if (!sameShowAsLastWeek && !showUpdated) {
+		await $blob.setItem('show:timestamp', newContent.show.timestamp);
+		await $blob.setItem('show:title', newContent.show.title);
+		await $blob.setItem('show:updated', true);
 
 		showEmbeds.push({
 			color: produceDecimalColor('#C9404C'),
@@ -67,7 +56,7 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 		});
 	}
 
-	if (firstInvocation && sameShowAsLastWeek && !show.updatedThisWeek) {
+	if (firstInvocation && sameShowAsLastWeek && !showUpdated) {
 		showEmbeds.push({
 			color: produceDecimalColor('#8b8b8b'),
 			description: '🔬 We\'ll check up until 12:00 for a new Show... stay tuned 🤞',
@@ -75,11 +64,8 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 		});
 	}
 
-	if (lastInvocation && sameShowAsLastWeek && !show.updatedThisWeek) {
-		await $supabase
-			.from('spicey-la-vicey')
-			.update({ updatedThisWeek: true })
-			.eq('id', 1);
+	if (lastInvocation && sameShowAsLastWeek && !showUpdated) {
+		await $blob.setItem('show:updated', true);
 
 		showEmbeds.push({
 			color: produceDecimalColor('#4B712B'),
@@ -88,15 +74,10 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 		});
 	}
 
-	if (!sameMixAsLastWeek && !mix.updatedThisWeek) {
-		await $supabase
-			.from('spicey-la-vicey')
-			.update({
-				timestamp: newContent.mix.timestamp,
-				title: newContent.mix.title,
-				updatedThisWeek: true,
-			})
-			.eq('id', 2);
+	if (!sameMixAsLastWeek && !mixUpdated) {
+		await $blob.setItem('mix:timestamp', newContent.mix.timestamp);
+		await $blob.setItem('mix:title', newContent.mix.title);
+		await $blob.setItem('mix:updated', true);
 
 		mixEmbeds.push({
 			color: produceDecimalColor('#C9404C'),
@@ -113,7 +94,7 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 		});
 	}
 
-	if (firstInvocation && sameMixAsLastWeek && !mix.updatedThisWeek) {
+	if (firstInvocation && sameMixAsLastWeek && !mixUpdated) {
 		mixEmbeds.push({
 			color: produceDecimalColor('#8b8b8b'),
 			description: '🔬 We\'ll check up until 12:00 for a new Mix... stay tuned 🤞',
@@ -121,11 +102,8 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 		});
 	}
 
-	if (lastInvocation && sameMixAsLastWeek && !mix.updatedThisWeek) {
-		await $supabase
-			.from('spicey-la-vicey')
-			.update({ updatedThisWeek: true })
-			.eq('id', 2);
+	if (lastInvocation && sameMixAsLastWeek && !mixUpdated) {
+		await $blob.setItem('mix:updated', true);
 
 		mixEmbeds.push({
 			color: produceDecimalColor('#4B712B'),

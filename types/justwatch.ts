@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-type-alias */
+
 export type BaseProvider = {
     color: number;
     provider: string;

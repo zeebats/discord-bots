@@ -1,20 +1,13 @@
-import { $supabase } from '@/lambda/spicey-la-vicey/supabase';
-import { useWebhook } from '@/src/webhook';
-import { produceDecimalColor } from '@/utils/color';
+import { useWebhook } from '../../src/webhook';
+import { produceDecimalColor } from '../../utils/color';
+import { $blob } from './index';
 
 const { WEBHOOK_SPICEY_LA_VICEY } = process.env;
 
 // eslint-disable-next-line max-lines-per-function
 export const handleBefore = async () => {
-	await $supabase
-		.from('spicey-la-vicey')
-		.update({ updatedThisWeek: false })
-		.eq('id', 1);
-
-	await $supabase
-		.from('spicey-la-vicey')
-		.update({ updatedThisWeek: false })
-		.eq('id', 2);
+	await $blob.setItem('show:updated', false);
+	await $blob.setItem('mix:updated', false);
 
 	await useWebhook({
 		url: WEBHOOK_SPICEY_LA_VICEY,

@@ -1,12 +1,15 @@
-import { APIEmbedField } from 'discord-api-types/v10';
+import type { APIEmbedField } from 'discord-api-types/v10';
+
 import { parse } from 'node-html-parser';
 
 import {
-	EntitiesType,
-	EntityType,
-	OdesliResponse,
+	type EntitiesType,
+	type EntityType,
+	type OdesliResponse,
 	Platform,
-} from '@/types/odesli';
+	schemaAppleMusicGenres,
+	schemaOdesliResponse,
+} from '../types/odesli';
 
 const platformMap = {
 	[Platform.AppleMusic]: {
@@ -33,22 +36,27 @@ const getEntities = (json: OdesliResponse) => {
 
 const getGenres = (response: string) => {
 	const body = parse(response);
-	const jsonData = body.querySelector('#serialized-server-data')?.textContent;
+	const jsonData = body.querySelector('#serialized-server-data')?.textContent ?? null;
 
-	if (!jsonData) {
+	if (jsonData === null) {
 		return '';
 	}
 
-	const parsed = JSON.parse(jsonData);
+	const parsed = schemaAppleMusicGenres.safeParse(JSON.parse(jsonData));
 
-	const genres: string[] = parsed?.[0]?.data?.seoData?.ogSongs?.[0]?.attributes?.genreNames || [];
+	if (!parsed.success) {
+		return '';
+	}
+
+	const genres = parsed.data[0]?.data?.seoData?.ogSongs?.[0]?.attributes?.genreNames ?? [];
 
 	return genres.filter((genre: string) => !['Muziek'].includes(genre)).join(', ');
 };
 
 // eslint-disable-next-line max-statements
 const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) => {
-	const firstEntity = entities.entries().next().value[1] as EntityType;
+	const firstEntity = entities.entries().next().value[1] as EntityType; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+
 	const entityKey = firstEntity?.entityUniqueId ?? '';
 
 	const {
@@ -57,13 +65,13 @@ const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) =
 		title,
 	} = json.entitiesByUniqueId[entityKey];
 
-	const urlAppleMusic = entities.get(Platform.AppleMusic)?.url;
+	const urlAppleMusic = entities.get(Platform.AppleMusic)?.url ?? null;
 
 	let requestAppleMusic: Response | null = null;
 	let responseAppleMusic = '';
-	let genres = '';
+	let genres = null;
 
-	if (urlAppleMusic) {
+	if (urlAppleMusic !== null) {
 		requestAppleMusic = await fetch(urlAppleMusic, { redirect: 'follow' });
 		responseAppleMusic = await requestAppleMusic.text();
 
@@ -74,9 +82,9 @@ const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) =
 		artistName,
 		genres,
 		links: Object.values(Platform).map((platform): APIEmbedField => {
-			let link = entities.get(platform)?.url;
+			let link = entities.get(platform)?.url ?? null;
 
-			if (platform === Platform.AppleMusic && requestAppleMusic) {
+			if (platform === Platform.AppleMusic && requestAppleMusic !== null) {
 				link = requestAppleMusic.url;
 			}
 
@@ -86,7 +94,7 @@ const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) =
 				value: `${platformMap[platform].emoji} No link found`,
 			};
 
-			if (link) {
+			if (link !== null) {
 				field.value = `${platformMap[platform].emoji} [Link](${link})`;
 			}
 
@@ -98,6 +106,7 @@ const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) =
 	};
 };
 
+// eslint-disable-next-line max-statements
 export const getData = async (url: string) => {
 	const fetchURL = new URL('https://api.song.link/v1-alpha.1/links');
 
@@ -105,11 +114,12 @@ export const getData = async (url: string) => {
 	fetchURL.searchParams.append('userCountry', 'NL');
 
 	const reponse = await fetch(fetchURL);
-	const json = await reponse.json();
+	const json = schemaOdesliResponse.parse(await reponse.json());
+
 	const entities = getEntities(json);
 
 	if (entities.size === 0) {
-		return false;
+		return null;
 	}
 
 	return getInfo(json, entities);

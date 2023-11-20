@@ -4,7 +4,6 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"generate:types": "source .env && npx supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" --schema public >| ./types/supabase.ts",
 		"lint:scripts:fix": "pnpm run eslint --fix",
 		"lint:scripts": "eslint '**/*.{json,mjs,ts}'",
 		"lint:types:typescript": "tsc --noEmit",
@@ -15,16 +14,18 @@
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "0.4.4",
+		"@netlify/blobs": "6.3.0",
 		"@netlify/functions": "2.4.0",
 		"@sentry/node": "7.80.1",
-		"@supabase/supabase-js": "2.38.4",
 		"@types/node": "20.9.2",
 		"colord": "2.9.3",
 		"date-fns": "2.30.0",
 		"discord-api-types": "0.37.63",
 		"html-entities": "2.4.0",
 		"node-html-parser": "6.1.11",
-		"phin": "3.7.0"
+		"phin": "3.7.0",
+		"unstorage": "^1.10.1",
+		"zod": "3.22.4"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "18.4.2",
