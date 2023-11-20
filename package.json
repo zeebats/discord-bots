@@ -15,26 +15,26 @@
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "0.4.4",
-		"@netlify/functions": "2.0.2",
-		"@sentry/node": "7.69.0",
-		"@supabase/supabase-js": "2.33.2",
-		"@types/node": "20.6.2",
+		"@netlify/functions": "2.4.0",
+		"@sentry/node": "7.80.1",
+		"@supabase/supabase-js": "2.38.4",
+		"@types/node": "20.9.2",
 		"colord": "2.9.3",
 		"date-fns": "2.30.0",
-		"discord-api-types": "0.37.56",
+		"discord-api-types": "0.37.63",
 		"html-entities": "2.4.0",
-		"node-html-parser": "6.1.10",
+		"node-html-parser": "6.1.11",
 		"phin": "3.7.0"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "17.7.1",
-		"@commitlint/config-conventional": "17.7.0",
+		"@commitlint/cli": "18.4.2",
+		"@commitlint/config-conventional": "18.4.2",
 		"@vitest/coverage-c8": "0.33.0",
-		"@zeebats/eslint-config": "1.4.0-beta.7",
-		"lint-staged": "14.0.1",
-		"netlify-cli": "16.3.4",
+		"@zeebats/eslint-config": "1.4.0-beta-8",
+		"lint-staged": "15.1.0",
+		"netlify-cli": "17.5.1",
 		"simple-git-hooks": "2.9.0",
 		"typescript": "5.2.2",
-		"vitest": "0.34.4"
+		"vitest": "0.34.6"
 	}
 }
