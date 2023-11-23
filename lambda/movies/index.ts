@@ -50,7 +50,7 @@ const handleEmpty = async () => useWebhook({
 export default async () => {
 	try {
 		if (escapeSummerTime()) {
-			return;
+			return new Response('Success', { status: 200 });
 		}
 
 		const items = await getMovies();
@@ -58,7 +58,7 @@ export default async () => {
 		if (items.length === 0) {
 			await handleEmpty();
 
-			return;
+			return new Response('Success', { status: 200 });
 		}
 
 		const response = await handleUpdate(items);
@@ -66,8 +66,12 @@ export default async () => {
 		if (!response.ok) {
 			throw new Error(JSON.stringify(response));
 		}
+
+		return new Response('Success', { status: 200 });
 	} catch (error: unknown) {
 		handleSentryError($sentry, error);
+
+		return new Response('Error', { status: 500 });
 	}
 };
 
