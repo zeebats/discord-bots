@@ -33,7 +33,7 @@ export default async () => {
 		// If function fires before the first allowed invocation, return without doing anything else
 		// During winterTime, the function fires at 01:00 UTC / 02:00 Amsterdam but we want it to start at 03:00 minimum
 		if (beforeFirstInvocation) {
-			return { statusCode: 200 };
+			return new Response('Success', { status: 200 });
 		}
 
 		if (isFirstInvocation) {
@@ -48,8 +48,12 @@ export default async () => {
 		if (escape && isLastInvocation) {
 			await handleFinally();
 		}
+
+		return new Response('Success', { status: 200 });
 	} catch (error: unknown) {
 		handleSentryError($sentry, error);
+
+		return new Response('Error', { status: 500 });
 	}
 };
 
