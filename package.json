@@ -31,8 +31,8 @@
 		"zod": "3.22.4"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "18.6.1",
-		"@commitlint/config-conventional": "18.6.2",
+		"@commitlint/cli": "19.0.3",
+		"@commitlint/config-conventional": "19.0.3",
 		"@vitest/coverage-c8": "0.33.0",
 		"@zeebats/eslint-config": "1.4.0-beta-9",
 		"lint-staged": "15.2.2",
