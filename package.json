@@ -26,7 +26,7 @@
 		"discord-api-types": "0.37.76",
 		"html-entities": "2.5.2",
 		"node-html-parser": "6.1.12",
-		"phin": "3.7.0",
+		"phin": "4.0.0",
 		"unstorage": "1.10.2",
 		"zod": "3.22.4"
 	},
