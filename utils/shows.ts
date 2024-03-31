@@ -5,13 +5,13 @@ import { getLink, getThumbnail, getTitle } from './justwatch';
 export const getSeason = (item: HTMLElement | null) => {
 	const element = item?.querySelector('.title-poster__badge');
 
-	return `Season ${element?.textContent.replace(/season /i, '')?.padStart(2, '0')}`;
+	return `Season ${element?.textContent.replace(/season /i, '').padStart(2, '0')}`;
 };
 
 export const getEpisode = (item: HTMLElement | null) => {
 	const element = item?.querySelector('.title-poster__badge__new');
 
-	const unmodified = element?.textContent.toLowerCase()?.split(' ');
+	const unmodified = element?.textContent.toLowerCase().split(' ');
 	const modified = unmodified?.map(string => {
 		if (string.includes('episode')) {
 			return string;
