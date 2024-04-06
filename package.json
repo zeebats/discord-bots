@@ -17,14 +17,14 @@
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "0.4.4",
-		"@netlify/blobs": "7.0.1",
+		"@netlify/blobs": "7.3.0",
 		"@netlify/functions": "2.6.0",
 		"@sentry/node": "7.109.0",
-		"@types/node": "20.12.2",
+		"@types/node": "20.12.5",
 		"@vitest/coverage-v8": "1.4.0",
 		"colord": "2.9.3",
 		"date-fns": "3.6.0",
-		"discord-api-types": "0.37.77",
+		"discord-api-types": "0.37.79",
 		"html-entities": "2.5.2",
 		"node-html-parser": "6.1.13",
 		"phin": "3.7.0",
@@ -36,9 +36,9 @@
 		"@commitlint/config-conventional": "19.1.0",
 		"@zeebats/eslint-config": "1.4.0",
 		"lint-staged": "15.2.2",
-		"netlify-cli": "17.21.1",
+		"netlify-cli": "17.21.2",
 		"simple-git-hooks": "2.11.1",
-		"typescript": "5.4.3",
+		"typescript": "5.4.4",
 		"vitest": "1.4.0"
 	}
 }
