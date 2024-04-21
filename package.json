@@ -19,7 +19,7 @@
 		"@js-temporal/polyfill": "0.4.4",
 		"@netlify/blobs": "7.3.0",
 		"@netlify/functions": "2.6.0",
-		"@sentry/node": "7.110.0",
+		"@sentry/node": "7.111.0",
 		"@types/node": "20.12.7",
 		"@vitest/coverage-v8": "1.5.0",
 		"colord": "2.9.3",
@@ -29,11 +29,11 @@
 		"node-html-parser": "6.1.13",
 		"phin": "3.7.1",
 		"unstorage": "1.10.2",
-		"zod": "3.22.4"
+		"zod": "3.22.5"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "19.2.1",
-		"@commitlint/config-conventional": "19.1.0",
+		"@commitlint/cli": "19.2.2",
+		"@commitlint/config-conventional": "19.2.2",
 		"@zeebats/eslint-config": "1.4.0",
 		"lint-staged": "15.2.2",
 		"netlify-cli": "17.22.1",
