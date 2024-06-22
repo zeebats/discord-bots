@@ -18,13 +18,13 @@
 	"dependencies": {
 		"@js-temporal/polyfill": "0.4.4",
 		"@netlify/blobs": "7.3.0",
-		"@netlify/functions": "2.7.0",
-		"@sentry/node": "8.9.2",
-		"@types/node": "20.14.2",
+		"@netlify/functions": "2.8.0",
+		"@sentry/node": "8.11.0",
+		"@types/node": "20.14.8",
 		"@vitest/coverage-v8": "1.6.0",
 		"colord": "2.9.3",
 		"date-fns": "3.6.0",
-		"discord-api-types": "0.37.89",
+		"discord-api-types": "0.37.90",
 		"html-entities": "2.5.2",
 		"node-html-parser": "6.1.13",
 		"phin": "3.7.1",
@@ -36,9 +36,9 @@
 		"@commitlint/config-conventional": "19.2.2",
 		"@zeebats/eslint-config": "1.4.0",
 		"lint-staged": "15.2.7",
-		"netlify-cli": "17.27.0",
+		"netlify-cli": "17.29.0",
 		"simple-git-hooks": "2.11.1",
-		"typescript": "5.4.5",
+		"typescript": "5.5.2",
 		"vitest": "1.6.0"
 	}
 }
