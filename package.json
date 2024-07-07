@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "0.4.4",
-		"@netlify/blobs": "7.4.0",
+		"@netlify/blobs": "8.0.0",
 		"@netlify/functions": "2.8.1",
 		"@sentry/node": "8.15.0",
 		"@types/node": "20.14.10",
