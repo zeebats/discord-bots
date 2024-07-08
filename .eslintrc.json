@@ -1,6 +1,9 @@
 {
 	"extends": ["@zeebats/eslint-config/typescript"],
-	"ignorePatterns": ["coverage/**/*"],
+	"ignorePatterns": [
+		"coverage/**/*",
+		"bruno/**/*"
+	],
 	"overrides": [
 		{
 			"files": ["*.d.ts"],
