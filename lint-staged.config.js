@@ -14,10 +14,6 @@ const filteredTasks =
 			let glob = value.match(/\*\*\/\*\.\S*(?=')/)?.[0] ?? '*';
 			let command = value.match(/^.*(?=\s+'\*\*\/\*\.\S*(?!'))/)?.[0] ?? value;
 
-			if (command.startsWith('astro')) {
-				glob = '*.astro';
-			}
-
 			if (command.startsWith('tsc')) {
 				glob = '*.ts?(x)';
 				command = `bash -c ${command}`;

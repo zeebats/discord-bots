@@ -3,7 +3,7 @@ node_bundler = "esbuild"
 
 [dev]
 publish = "dist"
-port = 3337
+port = 4448
 
 [[redirects]]
 from = "/api/*"
