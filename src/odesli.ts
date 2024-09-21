@@ -55,7 +55,10 @@ const getGenres = (response: string) => {
 
 // eslint-disable-next-line max-statements
 const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) => {
-	const firstEntity = entities.entries().next().value[1] as EntityType; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+	/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+	// @ts-expect-error Object could possible be undefined
+	const firstEntity = entities.entries().next().value[1] as EntityType;
+	/* eslint-enable @typescript-eslint/no-unnecessary-type-assertion */
 
 	const entityKey = firstEntity?.entityUniqueId ?? '';
 

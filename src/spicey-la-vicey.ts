@@ -1,41 +1,49 @@
-/* eslint-disable @typescript-eslint/no-type-alias */
+import { getUnixTime, startOfDay } from 'date-fns';
+import { parse } from 'node-html-parser';
 import phin from 'phin';
+import { get } from 'wild-wild-path';
+import { z } from 'zod';
 
-import {
-	getDescription,
-	getLink,
-	getTimestamp,
-	getTitle,
-} from '@/utils/spicey-la-vicey';
-
-export type Episode = {
-    description: string;
-    link: string;
-    timestamp: number;
-    title: string;
-}
-
-export type Episodes = Episode[];
-
-export type Content = {
-	mix: Episode;
-	show: Episode;
-}
+/* eslint-disable @typescript-eslint/naming-convention */
+const schema = z.object({
+	id: z.string(),
+	release: z.object({ date: z.string().datetime() }),
+	synopses: z.object({
+		long: z.string().nullish(),
+		medium: z.string().nullish(),
+		short: z.string(),
+	}),
+	titles: z.object({ entity_title: z.string() }),
+});
+/* eslint-enable @typescript-eslint/naming-convention */
 
 export const formatResponse = (response: string) => {
-	const cleaned = response.replaceAll(/^\s+|\s+$/g, '').replaceAll(/(\r\n|\n|\r)/gm, '');
+	const json = parse(response).querySelector('#__NEXT_DATA__')?.innerHTML ?? '';
+	const target = JSON.parse(json) as unknown as { [key: string]: unknown };
 
-	const cards = cleaned.match(/<article.*?class=".*?sc-c-playable-list-card.*?>(.*?)<\/article>/g) ?? [];
+	const {
+		data,
+		error,
+	} = schema.safeParse(get(target, '**.state.data.data.1.data.0'));
 
-	return cards.map(card => ({
-		description: getDescription(card),
-		link: getLink(card),
-		timestamp: getTimestamp(card),
-		title: getTitle(card),
-	}));
+	if (error !== undefined /* eslint-disable-line no-undefined */) {
+		return {
+			description: 'Something went wrong with scraping the page',
+			link: undefined /* eslint-disable-line no-undefined */,
+			timestamp: getUnixTime(startOfDay(Date.now())),
+			title: 'Error',
+		} as const;
+	}
+
+	return {
+		description: data.synopses.long ?? data.synopses.medium ?? data.synopses.short,
+		link: `https://www.bbc.co.uk/sounds/play/${data.id}`,
+		timestamp: getUnixTime(startOfDay(data.release.date)),
+		title: data.titles.entity_title,
+	} as const;
 };
 
-export const getShows = async () => {
+export const getShow = async () => {
 	const { body: response } = await phin({
 		parse: 'string',
 		url: 'https://www.bbc.co.uk/sounds/brand/b09c12lj',
@@ -44,7 +52,7 @@ export const getShows = async () => {
 	return formatResponse(response);
 };
 
-export const getMixes = async () => {
+export const getMix = async () => {
 	const { body: response } = await phin({
 		parse: 'string',
 		url: 'https://www.bbc.co.uk/sounds/brand/m0003l3c',
@@ -53,15 +61,7 @@ export const getMixes = async () => {
 	return formatResponse(response);
 };
 
-export const getNewestContent = async () => {
-	const shows = await getShows();
-	const mixes = await getMixes();
-
-	const [show] = shows.sort((a, b) => b.timestamp - a.timestamp);
-	const [mix] = mixes.sort((a, b) => b.timestamp - a.timestamp);
-
-	return {
-		mix,
-		show,
-	};
-};
+export const getNewestContent = async () => ({
+	mix: await getMix(),
+	show: await getShow(),
+});
