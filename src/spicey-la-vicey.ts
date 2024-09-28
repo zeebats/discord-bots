@@ -6,7 +6,6 @@ import { z } from 'zod';
 
 /* eslint-disable @typescript-eslint/naming-convention */
 const schema = z.object({
-	id: z.string(),
 	release: z.object({ date: z.string().datetime() }),
 	synopses: z.object({
 		long: z.string().nullish(),
@@ -14,6 +13,7 @@ const schema = z.object({
 		short: z.string(),
 	}),
 	titles: z.object({ entity_title: z.string() }),
+	urn: z.string(),
 });
 /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -37,7 +37,7 @@ export const formatResponse = (response: string) => {
 
 	return {
 		description: data.synopses.long ?? data.synopses.medium ?? data.synopses.short,
-		link: `https://www.bbc.co.uk/sounds/play/${data.id}`,
+		link: `https://www.bbc.co.uk/sounds/play/${data.urn.replace('urn:bbc:radio:episode:', '')}`,
 		timestamp: getUnixTime(startOfDay(data.release.date)),
 		title: data.titles.entity_title,
 	} as const;
