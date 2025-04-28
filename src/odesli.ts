@@ -36,19 +36,19 @@ const getEntities = (json: OdesliResponse) => {
 
 const getGenres = (response: string) => {
 	const body = parse(response);
-	const jsonData = body.querySelector('#serialized-server-data')?.textContent ?? null;
+	const jsonLdData = body.querySelector('script#schema\\:song')?.textContent ?? null;
 
-	if (jsonData === null) {
+	if (jsonLdData === null) {
 		return '';
 	}
 
-	const parsed = schemaAppleMusicGenres.safeParse(JSON.parse(jsonData));
+	const parsed = schemaAppleMusicGenres.safeParse(JSON.parse(jsonLdData));
 
 	if (!parsed.success) {
 		return '';
 	}
 
-	const genres = parsed.data[0]?.data?.seoData?.ogSongs?.[0]?.attributes?.genreNames ?? [];
+	const genres = parsed.data.audio.genre;
 
 	return genres.filter((genre: string) => !['Muziek'].includes(genre)).join(', ');
 };

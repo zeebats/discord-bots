@@ -9,7 +9,7 @@ export enum Platform {
 }
 /* eslint-enable @typescript-eslint/naming-convention */
 
-export const schemaAppleMusicGenres = z.array(z.object({ data: z.object({ seoData: z.object({ ogSongs: z.array(z.object({ attributes: z.object({ genreNames: z.array(z.string()) }) })) }) }) }));
+export const schemaAppleMusicGenres = z.object({ audio: z.object({ genre: z.array(z.string()) }) });
 
 export const schemaOdesliResponse = z.object({
 	entitiesByUniqueId: z.record(z.object({
