@@ -1,15 +1,11 @@
-import type * as $sentry from '@sentry/node';
-
-export type SentryClient = typeof $sentry;
+import type { init } from '@sentry/node';
 
 const { NETLIFY_DEV = 'false' } = process.env;
 
-export const handleSentryError = (client: SentryClient, error: unknown) => {
+export const handleSentryError = (client: ReturnType<typeof init>, error: unknown) => {
 	if (NETLIFY_DEV === 'true') {
 		console.dir(error);
 	} else {
-		client.captureException(error);
+		client?.captureException(error);
 	}
 };
-
-export * as $sentry from '@sentry/node';

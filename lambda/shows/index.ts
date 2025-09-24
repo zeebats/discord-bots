@@ -1,17 +1,17 @@
 import type { Config } from '@netlify/functions';
+import { init, setTag } from '@sentry/node';
 
 import type { Providers } from '../../types/shows';
 
 import { getShows } from '../../src/shows';
 import { useWebhook } from '../../src/webhook';
 import { escapeSummerTime } from '../../utils/dates';
-import { $sentry, handleSentryError } from '../../utils/sentry';
+import { handleSentryError } from '../../utils/sentry';
 
 const { SENTRY_DSN, WEBHOOK_SHOWS } = process.env;
 
-$sentry.init({ dsn: SENTRY_DSN });
-
-$sentry.setTag('bot', 'shows');
+const sentryClient = init({ dsn: SENTRY_DSN });
+setTag('bot', 'shows');
 
 const handleUpdate = async (providers: Providers) =>
 	useWebhook({
@@ -58,7 +58,7 @@ export default async () => {
 
 		return new Response('Success', { status: 200 });
 	} catch (error: unknown) {
-		handleSentryError($sentry, error);
+		handleSentryError(sentryClient, error);
 
 		return new Response('Error', { status: 500 });
 	}

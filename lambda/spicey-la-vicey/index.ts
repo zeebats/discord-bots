@@ -1,10 +1,11 @@
 import { Temporal } from '@js-temporal/polyfill';
 import type { Config } from '@netlify/functions';
+import { init, setTag } from '@sentry/node';
 import { createStorage } from 'unstorage';
 import netlifyBlobsDriver from 'unstorage/drivers/netlify-blobs';
 
 import { isSummerTime } from '../../utils/dates';
-import { $sentry, handleSentryError } from '../../utils/sentry';
+import { handleSentryError } from '../../utils/sentry';
 import { handleBefore } from './before';
 import { handleFinally } from './finally';
 import { handleUpdate } from './update';
@@ -17,9 +18,8 @@ export const $blob = createStorage({
 
 const { SENTRY_DSN } = process.env;
 
-$sentry.init({ dsn: SENTRY_DSN });
-
-$sentry.setTag('bot', 'spicey-la-vicey');
+const sentryClient = init({ dsn: SENTRY_DSN });
+setTag('bot', 'spicey-la-vicey');
 
 export default async () => {
 	try {
@@ -50,7 +50,7 @@ export default async () => {
 
 		return new Response('Success', { status: 200 });
 	} catch (error: unknown) {
-		handleSentryError($sentry, error);
+		handleSentryError(sentryClient, error);
 
 		return new Response('Error', { status: 500 });
 	}

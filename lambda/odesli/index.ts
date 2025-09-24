@@ -1,12 +1,14 @@
+import { init, setTag } from '@sentry/node';
+
 import { getData } from '@/src/odesli';
 import { useWebhook } from '@/src/webhook';
 import { produceDecimalColor } from '@/utils/color';
-import { $sentry, handleSentryError } from '@/utils/sentry';
+import { handleSentryError } from '@/utils/sentry';
 
 const { SENTRY_DSN, WEBHOOK_ODESLI } = process.env;
 
-$sentry.init({ dsn: SENTRY_DSN });
-$sentry.setTag('bot', 'odesli');
+const sentryClient = init({ dsn: SENTRY_DSN });
+setTag('bot', 'odesli');
 
 export default async (request: Request) => {
 	try {
@@ -42,6 +44,6 @@ export default async (request: Request) => {
 			},
 		});
 	} catch (error) {
-		handleSentryError($sentry, error);
+		handleSentryError(sentryClient, error);
 	}
 };
