@@ -7,8 +7,8 @@
 		"invoke:movies": "netlify functions:invoke --port 4448 movies",
 		"invoke:shows": "netlify functions:invoke --port 4448 shows",
 		"invoke:spicey-la-vicey": "netlify functions:invoke --port 4448 spicey-la-vicey",
-		"lint:scripts": "eslint '**/*.{json,js,ts}'",
-		"lint:scripts:fix": "pnpm run lint:scripts --fix",
+		"lint:scripts": "biome check",
+		"lint:scripts:fix": "biome check --write",
 		"lint:types:typescript": "tsc --noEmit",
 		"netlify": "netlify",
 		"prepare": "git config core.hooksPath .hooks",
@@ -32,13 +32,12 @@
 		"zod": "3.23.8"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "2.2.4",
 		"@commitlint/cli": "19.5.0",
 		"@commitlint/config-conventional": "19.5.0",
-		"@zeebats/eslint-config": "1.4.0",
 		"lint-staged": "15.2.10",
 		"netlify-cli": "17.36.2",
 		"typescript": "5.6.2",
 		"vitest": "2.1.1"
-	},
-	"packageManager": "npm@10.8.3"
+	}
 }
