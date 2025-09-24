@@ -8,11 +8,7 @@ export const produceDecimalColor = (color: AnyColor) => {
 		parsedColor = colord('#000001');
 	}
 
-	const {
-		b,
-		g,
-		r,
-	} = parsedColor.toRgb();
+	const { b, g, r } = parsedColor.toRgb();
 
-	return (r << 16) + (g << 8) + (b);
+	return (r << 16) + (g << 8) + b;
 };

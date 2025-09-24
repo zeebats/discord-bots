@@ -14,8 +14,9 @@ export const handleFinally = async () => {
 			embeds: [
 				{
 					color: produceDecimalColor('#4B712B'),
-					description: '🥦🥦🥦\n\nFinished checking for both new show & mix content. However, nothing new found this week, meh!',
-					title: 'Radio 1\'s Drum & Bass',
+					description:
+						'🥦🥦🥦\n\nFinished checking for both new show & mix content. However, nothing new found this week, meh!',
+					title: "Radio 1's Drum & Bass",
 				},
 			],
 		},

@@ -1,6 +1,5 @@
-import type { Config } from '@netlify/functions';
-
 import { Temporal } from '@js-temporal/polyfill';
+import type { Config } from '@netlify/functions';
 import { createStorage } from 'unstorage';
 import netlifyBlobsDriver from 'unstorage/drivers/netlify-blobs';
 
@@ -10,7 +9,11 @@ import { handleBefore } from './before';
 import { handleFinally } from './finally';
 import { handleUpdate } from './update';
 
-export const $blob = createStorage({ driver: netlifyBlobsDriver({ name: 'spicey-la-vicey' }) }); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+export const $blob = createStorage({
+	driver: netlifyBlobsDriver({
+		name: 'spicey-la-vicey',
+	}),
+});
 
 const { SENTRY_DSN } = process.env;
 
@@ -18,7 +21,6 @@ $sentry.init({ dsn: SENTRY_DSN });
 
 $sentry.setTag('bot', 'spicey-la-vicey');
 
-// eslint-disable-next-line max-statements, consistent-return
 export default async () => {
 	try {
 		const { hour } = Temporal.Now.zonedDateTimeISO('UTC');
@@ -40,12 +42,9 @@ export default async () => {
 			await handleBefore();
 		}
 
-		const escape = await handleUpdate(
-			isFirstInvocation,
-			isLastInvocation,
-		);
+		const hasEscape = await handleUpdate(isFirstInvocation, isLastInvocation);
 
-		if (escape && isLastInvocation) {
+		if (hasEscape && isLastInvocation) {
 			await handleFinally();
 		}
 

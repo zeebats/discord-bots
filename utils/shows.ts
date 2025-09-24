@@ -26,11 +26,13 @@ export const getEpisode = (item: HTMLElement | null) => {
 export const getShowItems = (element: HTMLElement | null) => {
 	const items = element?.querySelectorAll('.horizontal-title-list__item') ?? [];
 
-	return items.map(item => ({
-		episode: getEpisode(item),
-		link: getLink(item),
-		season: getSeason(item),
-		thumbnail: getThumbnail(item),
-		title: getTitle(item),
-	})).sort((a, b) => `${a.title} ${a.season}`.localeCompare(`${b.title} ${b.season}`));
+	return items
+		.map(item => ({
+			episode: getEpisode(item),
+			link: getLink(item),
+			season: getSeason(item),
+			thumbnail: getThumbnail(item),
+			title: getTitle(item),
+		}))
+		.sort((a, b) => `${a.title} ${a.season}`.localeCompare(`${b.title} ${b.season}`));
 };

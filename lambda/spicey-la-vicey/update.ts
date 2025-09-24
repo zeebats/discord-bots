@@ -7,17 +7,16 @@ import { $blob } from './index';
 
 const { WEBHOOK_SPICEY_LA_VICEY } = process.env;
 
-// eslint-disable-next-line max-lines-per-function, max-statements, complexity
 export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boolean) => {
 	const newContent = await getNewestContent();
 
-	const showTimestamp = await $blob.getItem<number>('show:timestamp') ?? 0;
-	const showTitle = await $blob.getItem<string>('show:title') ?? '';
-	const showUpdated = await $blob.getItem<boolean>('show:updated') ?? true;
+	const showTimestamp = (await $blob.getItem<number>('show:timestamp')) ?? 0;
+	const showTitle = (await $blob.getItem<string>('show:title')) ?? '';
+	const showUpdated = (await $blob.getItem<boolean>('show:updated')) ?? true;
 
-	const mixTimestamp = await $blob.getItem<number>('mix:timestamp') ?? 0;
-	const mixTitle = await $blob.getItem<string>('mix:title') ?? '';
-	const mixUpdated = await $blob.getItem<boolean>('mix:updated') ?? true;
+	const mixTimestamp = (await $blob.getItem<number>('mix:timestamp')) ?? 0;
+	const mixTitle = (await $blob.getItem<string>('mix:title')) ?? '';
+	const mixUpdated = (await $blob.getItem<boolean>('mix:updated')) ?? true;
 
 	const sameShowAsLastWeek = showTimestamp === newContent.show.timestamp && showTitle === newContent.show.title;
 	const sameMixAsLastWeek = mixTimestamp === newContent.mix.timestamp && mixTitle === newContent.mix.title;
@@ -59,7 +58,7 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 	if (firstInvocation && sameShowAsLastWeek && !showUpdated) {
 		showEmbeds.push({
 			color: produceDecimalColor('#8b8b8b'),
-			description: '🔬 We\'ll check up until 12:00 for a new Show... stay tuned 🤞',
+			description: "🔬 We'll check up until 12:00 for a new Show... stay tuned 🤞",
 			title: 'Show: No new content found... yet!?',
 		});
 	}
@@ -69,7 +68,7 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 
 		showEmbeds.push({
 			color: produceDecimalColor('#4B712B'),
-			description: '🥦 We\'ve finished checking for a Show update. Sadly, no new episode was found, meh!',
+			description: "🥦 We've finished checking for a Show update. Sadly, no new episode was found, meh!",
 			title: 'Show: No new content found',
 		});
 	}
@@ -97,7 +96,7 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 	if (firstInvocation && sameMixAsLastWeek && !mixUpdated) {
 		mixEmbeds.push({
 			color: produceDecimalColor('#8b8b8b'),
-			description: '🔬 We\'ll check up until 12:00 for a new Mix... stay tuned 🤞',
+			description: "🔬 We'll check up until 12:00 for a new Mix... stay tuned 🤞",
 			title: 'Mix: No new content found... yet!?',
 		});
 	}
@@ -107,7 +106,7 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 
 		mixEmbeds.push({
 			color: produceDecimalColor('#4B712B'),
-			description: '🥦 We\'ve finished checking for a Mix update. Sadly, no new episode was found, meh!',
+			description: "🥦 We've finished checking for a Mix update. Sadly, no new episode was found, meh!",
 			title: 'Mix: No new content found',
 		});
 	}
@@ -116,19 +115,23 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 		return false;
 	}
 
-	await Promise.allSettled(showEmbeds.map(async embed => {
-		await useWebhook({
-			url: WEBHOOK_SPICEY_LA_VICEY,
-			webhook: { embeds: [embed] },
-		});
-	}));
+	await Promise.allSettled(
+		showEmbeds.map(async embed => {
+			await useWebhook({
+				url: WEBHOOK_SPICEY_LA_VICEY,
+				webhook: { embeds: [embed] },
+			});
+		}),
+	);
 
-	await Promise.allSettled(mixEmbeds.map(async embed => {
-		await useWebhook({
-			url: WEBHOOK_SPICEY_LA_VICEY,
-			webhook: { embeds: [embed] },
-		});
-	}));
+	await Promise.allSettled(
+		mixEmbeds.map(async embed => {
+			await useWebhook({
+				url: WEBHOOK_SPICEY_LA_VICEY,
+				webhook: { embeds: [embed] },
+			});
+		}),
+	);
 
 	// Escape false after shooting a webhook to avoid handleFinally webhook
 	return false;

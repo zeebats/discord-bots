@@ -3,20 +3,21 @@ import { type HTMLElement, parse } from 'node-html-parser';
 import { selectedProviders } from '../enums/providers';
 import { produceDecimalColor } from './color';
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 export type JustWatchResponse = {
 	response: string;
 	url: string;
-}
+};
 
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 export type TodayResponse = {
 	element: HTMLElement;
 	url: string;
-}
+};
 
 export const getTitle = (item: HTMLElement | null) => {
-	const element = item?.querySelector('.picture-comp__img')?.getAttribute('alt') ?? item?.querySelector('.title-poster--no-poster')?.textContent ?? '';
+	const element =
+		item?.querySelector('.picture-comp__img')?.getAttribute('alt') ??
+		item?.querySelector('.title-poster--no-poster')?.textContent ??
+		'';
 
 	return element.replace(/\s*-\s*season \d*/i, '');
 };
@@ -36,10 +37,7 @@ export const getLink = (element: HTMLElement | null) => {
 };
 
 export const getToday = (responses: JustWatchResponse[]) => {
-	const parsed = responses.map(({
-		response,
-		url,
-	}) => {
+	const parsed = responses.map(({ response, url }) => {
 		const body = parse(response);
 
 		const firstChild = body.querySelector('.timeline__timeframe:first-child');
@@ -89,11 +87,10 @@ export const getColor = (element: HTMLElement | null) => {
 export const getProviderName = (element: HTMLElement | null) => {
 	const provider = getShortcode(element);
 
-	const [
-		, selected,
-	] = Object.entries(selectedProviders).find(([key]) => key === provider) ?? [];
+	const [, selected] = Object.entries(selectedProviders).find(([key]) => key === provider) ?? [];
 
 	return selected?.name ?? '';
 };
 
-export const getProviderLink = (providerSlug: string, type: string) => `https://www.justwatch.com/us/provider/${providerSlug}/new/${type}`;
+export const getProviderLink = (providerSlug: string, type: string) =>
+	`https://www.justwatch.com/us/provider/${providerSlug}/new/${type}`;

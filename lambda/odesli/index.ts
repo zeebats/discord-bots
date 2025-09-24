@@ -3,15 +3,11 @@ import { useWebhook } from '@/src/webhook';
 import { produceDecimalColor } from '@/utils/color';
 import { $sentry, handleSentryError } from '@/utils/sentry';
 
-const {
-	SENTRY_DSN,
-	WEBHOOK_ODESLI,
-} = process.env;
+const { SENTRY_DSN, WEBHOOK_ODESLI } = process.env;
 
 $sentry.init({ dsn: SENTRY_DSN });
 $sentry.setTag('bot', 'odesli');
 
-// eslint-disable-next-line max-statements
 export default async (request: Request) => {
 	try {
 		const parameters = new URL(request.url).searchParams;

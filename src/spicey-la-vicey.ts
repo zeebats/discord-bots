@@ -4,7 +4,6 @@ import phin from 'phin';
 import { get } from 'wild-wild-path';
 import { z } from 'zod';
 
-/* eslint-disable @typescript-eslint/naming-convention */
 const schema = z.object({
 	release: z.object({ date: z.string().datetime() }),
 	synopses: z.object({
@@ -15,21 +14,17 @@ const schema = z.object({
 	titles: z.object({ entity_title: z.string() }),
 	urn: z.string(),
 });
-/* eslint-enable @typescript-eslint/naming-convention */
 
 export const formatResponse = (response: string) => {
 	const json = parse(response).querySelector('#__NEXT_DATA__')?.innerHTML ?? '';
 	const target = JSON.parse(json) as unknown as { [key: string]: unknown };
 
-	const {
-		data,
-		error,
-	} = schema.safeParse(get(target, '**.state.data.data.1.data.0'));
+	const { data, error } = schema.safeParse(get(target, '**.state.data.data.1.data.0'));
 
-	if (error !== undefined /* eslint-disable-line no-undefined */) {
+	if (error !== undefined) {
 		return {
 			description: 'Something went wrong with scraping the page',
-			link: undefined /* eslint-disable-line no-undefined */,
+			link: undefined,
 			timestamp: getUnixTime(startOfDay(Date.now())),
 			title: 'Error',
 		} as const;

@@ -13,10 +13,6 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"target": "ESNext",
-		"types": [
-			"node",
-			"vitest/globals",
-			"vitest/importMeta"
-		]
+		"types": ["node", "vitest/globals", "vitest/importMeta"]
 	}
 }

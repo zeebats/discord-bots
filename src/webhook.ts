@@ -8,13 +8,10 @@ export const useWebhook = async ({
 	url,
 	webhook,
 }: {
-	url: string | undefined,
-	webhook: RESTPostAPIWebhookWithTokenJSONBody
-	// eslint-disable-next-line require-await
+	url: string | undefined;
+	webhook: RESTPostAPIWebhookWithTokenJSONBody;
 }) => {
-	const {
-		content = '', embeds,
-	} = webhook;
+	const { content = '', embeds } = webhook;
 
 	let fetchURL = url;
 
@@ -22,7 +19,6 @@ export const useWebhook = async ({
 		fetchURL = WEBHOOK_TEST;
 	}
 
-	// eslint-disable-next-line no-undefined
 	if (fetchURL === undefined) {
 		throw new Error('No fetchURL set');
 	}
@@ -32,7 +28,7 @@ export const useWebhook = async ({
 			content,
 			embeds,
 		}),
-		headers: { 'Content-Type': 'application/json' /* eslint-disable-line @typescript-eslint/naming-convention */ },
+		headers: { 'Content-Type': 'application/json' },
 		method: 'POST',
 	});
 };

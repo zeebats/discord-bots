@@ -4,7 +4,6 @@ import { $blob } from './index';
 
 const { WEBHOOK_SPICEY_LA_VICEY } = process.env;
 
-// eslint-disable-next-line max-lines-per-function
 export const handleBefore = async () => {
 	await $blob.setItem('show:updated', false);
 	await $blob.setItem('mix:updated', false);
@@ -26,8 +25,10 @@ export const handleBefore = async () => {
 							value: '**[All available mixes](https://www.bbc.co.uk/programmes/m0003l3c/episodes/player)**',
 						},
 					],
-					thumbnail: { url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700' },
-					title: 'Radio 1\'s Drum & Bass',
+					thumbnail: {
+						url: 'https://emojis.slackmojis.com/emojis/images/1643509700/43992/hyper-drum-time.gif?1643509700',
+					},
+					title: "Radio 1's Drum & Bass",
 				},
 			],
 		},

@@ -1,51 +1,39 @@
 import type { Config } from '@netlify/functions';
-
-import type { Providers } from '../../types/shows';
-
 import { getShows } from '../../src/shows';
 import { useWebhook } from '../../src/webhook';
+import type { Providers } from '../../types/shows';
 import { escapeSummerTime } from '../../utils/dates';
 import { $sentry, handleSentryError } from '../../utils/sentry';
 
-const {
-	SENTRY_DSN,
-	WEBHOOK_SHOWS,
-} = process.env;
+const { SENTRY_DSN, WEBHOOK_SHOWS } = process.env;
 
 $sentry.init({ dsn: SENTRY_DSN });
 
 $sentry.setTag('bot', 'shows');
 
-// eslint-disable-next-line require-await
-const handleUpdate = async (providers: Providers) => useWebhook({
-	url: WEBHOOK_SHOWS,
-	webhook: {
-		embeds: providers.map(({
-			color,
-			provider,
-			shows,
-			thumbnail,
-			url,
-		}) => ({
-			color,
-			fields: shows.map(show => ({
-				name: show.title,
-				value: `[${show.season} — ${show.episode}](${show.link})`,
+const handleUpdate = async (providers: Providers) =>
+	useWebhook({
+		url: WEBHOOK_SHOWS,
+		webhook: {
+			embeds: providers.map(({ color, provider, shows, thumbnail, url }) => ({
+				color,
+				fields: shows.map(show => ({
+					name: show.title,
+					value: `[${show.season} — ${show.episode}](${show.link})`,
+				})),
+				thumbnail: { url: thumbnail },
+				title: `New on ${provider}`,
+				url,
 			})),
-			thumbnail: { url: thumbnail },
-			title: `New on ${provider}`,
-			url,
-		})),
-	},
-});
+		},
+	});
 
-// eslint-disable-next-line require-await
-const handleEmpty = async () => useWebhook({
-	url: WEBHOOK_SHOWS,
-	webhook: { embeds: [{ title: 'No new shows today!' }] },
-});
+const handleEmpty = async () =>
+	useWebhook({
+		url: WEBHOOK_SHOWS,
+		webhook: { embeds: [{ title: 'No new shows today!' }] },
+	});
 
-// eslint-disable-next-line max-statements
 export default async () => {
 	try {
 		if (escapeSummerTime()) {

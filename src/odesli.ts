@@ -53,20 +53,13 @@ const getGenres = (response: string) => {
 	return genres.filter((genre: string) => !['Muziek'].includes(genre)).join(', ');
 };
 
-// eslint-disable-next-line max-statements
 const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) => {
-	/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 	// @ts-expect-error Object could possible be undefined
 	const firstEntity = entities.entries().next().value[1] as EntityType;
-	/* eslint-enable @typescript-eslint/no-unnecessary-type-assertion */
 
 	const entityKey = firstEntity?.entityUniqueId ?? '';
 
-	const {
-		artistName,
-		thumbnailUrl,
-		title,
-	} = json.entitiesByUniqueId[entityKey];
+	const { artistName, thumbnailUrl, title } = json.entitiesByUniqueId[entityKey];
 
 	const urlAppleMusic = entities.get(Platform.AppleMusic)?.url ?? null;
 
@@ -109,7 +102,6 @@ const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) =
 	};
 };
 
-// eslint-disable-next-line max-statements
 export const getData = async (url: string) => {
 	const fetchURL = new URL('https://api.song.link/v1-alpha.1/links');
 
