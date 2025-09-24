@@ -28,7 +28,7 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["**/*.json", "**/*.ts", "!**/bruno"]
+		"includes": ["**/*.js", "**/*.json", "**/*.ts", "!**/bruno"]
 	},
 	"formatter": {
 		"enabled": true,
