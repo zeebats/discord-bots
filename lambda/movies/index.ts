@@ -1,7 +1,9 @@
 import type { Config } from '@netlify/functions';
+
+import type { Providers } from '../../types/movies';
+
 import { getMovies } from '../../src/movies';
 import { useWebhook } from '../../src/webhook';
-import type { Providers } from '../../types/movies';
 import { escapeSummerTime } from '../../utils/dates';
 import { $sentry, handleSentryError } from '../../utils/sentry';
 

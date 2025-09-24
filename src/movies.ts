@@ -1,5 +1,6 @@
-import { selectedProviders } from '../enums/providers';
 import type { Provider } from '../types/movies';
+
+import { selectedProviders } from '../enums/providers';
 import { getColor, getProviderLink, getProviderName, getToday, type JustWatchResponse } from '../utils/justwatch';
 import { getMovieItems } from '../utils/movies';
 

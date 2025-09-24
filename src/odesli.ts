@@ -1,5 +1,4 @@
 import type { APIEmbedField } from 'discord-api-types/v10';
-
 import { parse } from 'node-html-parser';
 
 import {
