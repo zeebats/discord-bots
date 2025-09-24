@@ -13,13 +13,13 @@ describe('isSummerTime()', () => {
 
 	test('26 March 2023 01:59:59 UTC is wintertime', () => {
 		const date = Temporal.ZonedDateTime.from({
-			timeZone: 'UTC',
-			year: 2023,
-			month: 3,
 			day: 26,
 			hour: 1,
 			minute: 59,
+			month: 3,
 			second: 59,
+			timeZone: 'UTC',
+			year: 2023,
 		});
 
 		vi.setSystemTime(new Date(date.toLocaleString()));
@@ -29,13 +29,13 @@ describe('isSummerTime()', () => {
 
 	test('26 March 2023 02:00:00 UTC is summertime', () => {
 		const date = Temporal.ZonedDateTime.from({
-			timeZone: 'UTC',
-			year: 2023,
-			month: 3,
 			day: 26,
 			hour: 2,
 			minute: 0,
+			month: 3,
 			second: 0,
+			timeZone: 'UTC',
+			year: 2023,
 		});
 
 		vi.setSystemTime(new Date(date.toLocaleString()));
@@ -45,13 +45,13 @@ describe('isSummerTime()', () => {
 
 	test('29 October 2023 02:59:59 UTC is summertime', () => {
 		const date = Temporal.ZonedDateTime.from({
-			timeZone: 'UTC',
-			year: 2023,
-			month: 10,
 			day: 29,
 			hour: 2,
 			minute: 59,
+			month: 10,
 			second: 59,
+			timeZone: 'UTC',
+			year: 2023,
 		});
 
 		vi.setSystemTime(new Date(date.toLocaleString()));
@@ -61,13 +61,13 @@ describe('isSummerTime()', () => {
 
 	test('29 October 2023 03:00:00 UTC is wintertime', () => {
 		const date = Temporal.ZonedDateTime.from({
-			timeZone: 'UTC',
-			year: 2023,
-			month: 10,
 			day: 29,
 			hour: 3,
 			minute: 0,
+			month: 10,
 			second: 0,
+			timeZone: 'UTC',
+			year: 2023,
 		});
 
 		vi.setSystemTime(new Date(date.toLocaleString()));
@@ -87,11 +87,11 @@ describe('escapeSummerTime() during wintertime', () => {
 
 	test("16:00 UTC — doesn't post", () => {
 		const date = Temporal.ZonedDateTime.from({
-			timeZone: 'UTC',
-			year: 2023,
-			month: 3,
 			day: 25,
 			hour: 16,
+			month: 3,
+			timeZone: 'UTC',
+			year: 2023,
 		});
 
 		vi.setSystemTime(new Date(date.toLocaleString()));
@@ -102,11 +102,11 @@ describe('escapeSummerTime() during wintertime', () => {
 
 	test('17:00 UTC — does post', () => {
 		const date = Temporal.ZonedDateTime.from({
-			timeZone: 'UTC',
-			year: 2023,
-			month: 3,
 			day: 25,
 			hour: 17,
+			month: 3,
+			timeZone: 'UTC',
+			year: 2023,
 		});
 
 		vi.setSystemTime(new Date(date.toLocaleString()));
@@ -127,11 +127,11 @@ describe('escapeSummerTime() during summertime', () => {
 
 	test('16:00 UTC — does post', () => {
 		const date = Temporal.ZonedDateTime.from({
-			timeZone: 'UTC',
-			year: 2023,
-			month: 3,
 			day: 27,
 			hour: 16,
+			month: 3,
+			timeZone: 'UTC',
+			year: 2023,
 		});
 
 		vi.setSystemTime(new Date(date.toLocaleString()));
@@ -142,11 +142,11 @@ describe('escapeSummerTime() during summertime', () => {
 
 	test("17:00 UTC — doesn't post", () => {
 		const date = Temporal.ZonedDateTime.from({
-			timeZone: 'UTC',
-			year: 2023,
-			month: 3,
 			day: 27,
 			hour: 17,
+			month: 3,
+			timeZone: 'UTC',
+			year: 2023,
 		});
 
 		vi.setSystemTime(new Date(date.toLocaleString()));
