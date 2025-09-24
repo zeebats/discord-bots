@@ -35,7 +35,7 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 	const showEmbeds = [];
 	const mixEmbeds = [];
 
-	if (!sameShowAsLastWeek && !showUpdated) {
+	if (!(sameShowAsLastWeek || showUpdated)) {
 		await $blob.setItem('show:timestamp', newContent.show.timestamp);
 		await $blob.setItem('show:title', newContent.show.title);
 		await $blob.setItem('show:updated', true);
@@ -73,7 +73,7 @@ export const handleUpdate = async (firstInvocation: boolean, lastInvocation: boo
 		});
 	}
 
-	if (!sameMixAsLastWeek && !mixUpdated) {
+	if (!(sameMixAsLastWeek || mixUpdated)) {
 		await $blob.setItem('mix:timestamp', newContent.mix.timestamp);
 		await $blob.setItem('mix:title', newContent.mix.title);
 		await $blob.setItem('mix:updated', true);
