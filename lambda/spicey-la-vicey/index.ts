@@ -10,16 +10,16 @@ import { handleBefore } from './before';
 import { handleFinally } from './finally';
 import { handleUpdate } from './update';
 
+const { SENTRY_DSN } = process.env;
+
+const sentryClient = init({ dsn: SENTRY_DSN });
+setTag('bot', 'spicey-la-vicey');
+
 export const $blob = createStorage({
 	driver: netlifyBlobsDriver({
 		name: 'spicey-la-vicey',
 	}),
 });
-
-const { SENTRY_DSN } = process.env;
-
-const sentryClient = init({ dsn: SENTRY_DSN });
-setTag('bot', 'spicey-la-vicey');
 
 export default async () => {
 	try {

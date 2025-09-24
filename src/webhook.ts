@@ -13,17 +13,17 @@ export const useWebhook = async ({
 }) => {
 	const { content = '', embeds } = webhook;
 
-	let fetchURL = url;
+	let fetchUrl = url;
 
 	if (ENV_DEV) {
-		fetchURL = WEBHOOK_TEST;
+		fetchUrl = WEBHOOK_TEST;
 	}
 
-	if (fetchURL === undefined) {
+	if (fetchUrl === undefined) {
 		throw new Error('No fetchURL set');
 	}
 
-	return fetch(fetchURL, {
+	return fetch(fetchUrl, {
 		body: JSON.stringify({
 			content,
 			embeds,

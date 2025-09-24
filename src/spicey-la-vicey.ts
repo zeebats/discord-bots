@@ -11,7 +11,10 @@ const schema = z.object({
 		medium: z.string().nullish(),
 		short: z.string(),
 	}),
-	titles: z.object({ entity_title: z.string() }),
+	titles: z.object({
+		// biome-ignore lint/style/useNamingConvention: Specific key in response
+		entity_title: z.string(),
+	}),
 	urn: z.string(),
 });
 

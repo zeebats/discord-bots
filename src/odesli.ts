@@ -102,12 +102,12 @@ const getInfo = async (json: OdesliResponse, entities: EntitiesType<Platform>) =
 };
 
 export const getData = async (url: string) => {
-	const fetchURL = new URL('https://api.song.link/v1-alpha.1/links');
+	const fetchUrl = new URL('https://api.song.link/v1-alpha.1/links');
 
-	fetchURL.searchParams.append('url', url);
-	fetchURL.searchParams.append('userCountry', 'NL');
+	fetchUrl.searchParams.append('url', url);
+	fetchUrl.searchParams.append('userCountry', 'NL');
 
-	const reponse = await fetch(fetchURL);
+	const reponse = await fetch(fetchUrl);
 	const json = schemaOdesliResponse.parse(await reponse.json());
 
 	const entities = getEntities(json);
