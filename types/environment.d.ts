@@ -1,3 +1,6 @@
+/** biome-ignore-all lint/correctness/noUnusedVariables: Used for `process.env` */
+/** biome-ignore-all lint/style/useNamingConvention: Used for `process.env` */
+
 namespace NodeJS {
 	interface ProcessEnvironment {
 		WEBHOOK_MOVIES: string | undefined;

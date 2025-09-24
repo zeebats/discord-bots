@@ -23,7 +23,7 @@ export const useWebhook = async ({
 		throw new Error('No fetchURL set');
 	}
 
-	return fetch(fetchUrl, {
+	return await fetch(fetchUrl, {
 		body: JSON.stringify({
 			content,
 			embeds,
